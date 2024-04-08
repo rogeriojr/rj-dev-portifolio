@@ -20,7 +20,7 @@ jobs:
       run: |
         lftp -e "set ftp:ssl-allow no; \
                  open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ftp://185.27.134.155; \
-                 mirror --reverse --verbose ./ /home/vol1_7/infinityfree.com/if0_36204806/public_html; \
+                 mirror --reverse --verbose ./ /htdocs; \
                  bye"
       env:
         FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
