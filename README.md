@@ -20,7 +20,7 @@ Para acessar o meu portfólio online, clique no link abaixo:
 
 ## Contato
 
-Se você tiver alguma pergunta, feedback ou oportunidade de colaboração, sinta-se à vontade para entrar em contato comigo através do email: [seu-email@example.com](mailto:rogeriojr1100@gmail.com).
+Se você tiver alguma pergunta, feedback ou oportunidade de colaboração, sinta-se à vontade para entrar em contato comigo através do email: [rogeriojr1100@gmail.com](mailto:rogeriojr1100@gmail.com).
 
 ---
 
