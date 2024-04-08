@@ -19,7 +19,7 @@ jobs:
     - name: Enviar para FTP
       run: |
         lftp -e "set ftp:ssl-allow no; \
-                 open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ftp://185.27.134.155; \
+                 open -u $FTP_USERNAME,$FTP_PASSWORD ftp://185.27.134.155; \
                  mirror --reverse --verbose ./ /htdocs; \
                  bye"
       env:
