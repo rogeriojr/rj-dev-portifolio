@@ -343,7 +343,10 @@ button:focus {
 /* Home Banner Area css
 ============================================================================================ */
 .home_banner_area {
+  padding-top: 50vh;
+  margin-left: 20vw;
   z-index: 1;
+  width: 100%; 
   background: url(../img/banner/home-banner.png) no-repeat top center;
   background-position: center;
   background-size: cover; }
