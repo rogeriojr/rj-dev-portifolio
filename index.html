@@ -43,23 +43,8 @@
 
 	<!-- Load Components -->
 	<script>
-		$(function () {
-			function loadComponent(selector, path) {
-				$(selector).load(path, function (response, status) {
-					if (status === "error") {
-						console.error("Erro ao carregar:", path);
-					}
-				});
-			}
-
-			loadComponent("#header", "./components/header.html");
-			loadComponent("#home-banner", "./components/home-banner.html");
-			loadComponent("#footer", "./components/footer.html");
-			loadComponent("#about", "./about.html");
-			loadComponent("#portfolio", "./portfolio.html");
-		});
-		// Adicione um callback quando todo o conteúdo for carregado
 		$(document).ready(function () {
+			// Carrega componentes principais primeiro
 			Promise.all([
 				$("#header").load("./components/header.html"),
 				$("#home-banner").load("./components/home-banner.html"),
@@ -67,9 +52,14 @@
 				$("#about").load("./about.html"),
 				$("#portfolio-content").load("./portfolio.html")
 			]).then(() => {
-				// Carrega scripts APÓS os componentes
-				$.getScript("js/portfolioManager.js")
-					.fail(() => console.error("Falha ao carregar portfolioManager.js"));
+				// Carrega scripts comuns
+				$("#scripts").load("./components/scripts.html", () => {
+					// Carrega script específico do portfolio
+					$.getScript("js/portfolioManager.js")
+						.fail(() => console.error("Falha ao carregar portfolioManager.js"));
+				});
+			}).catch((error) => {
+				console.error("Erro ao carregar componentes:", error);
 			});
 		});
 	</script>
