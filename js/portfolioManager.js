@@ -3,7 +3,7 @@
 async function carregarDados() {
   try {
     const [projetosRes, certificadosRes] = await Promise.all([
-      fetch("/json/projetos/desenvolvimento/desenvolvimento.json"),
+      fetch("/json/projetos/desenvolvimento.json"),
       fetch("/json/certificados/certificados.json"),
     ]);
 
