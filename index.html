@@ -1,12 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
-	<!-- Head Content Original -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="img/favicon.png" type="image/png">
 	<title>Rogerio Portfólio</title>
+
+	<!-- CSS -->
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="vendors/linericon/style.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
@@ -14,49 +15,74 @@
 	<link rel="stylesheet" href="css/magnific-popup.css">
 	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
 	<link rel="stylesheet" href="css/style.css">
-	<!-- Carregue jQuery aqui -->
+
+	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-	<!-- Header Component -->
+	<!-- Componentes -->
 	<div id="header"></div>
-
-	<!-- Home Banner Component -->
 	<div id="home-banner"></div>
 
-	<!-- Main Content -->
-	<!--================ Start About Us Area =================-->
+	<!-- Seção Sobre -->
 	<section class="about_area section_gap">
 		<div id="about"></div>
 	</section>
-	<!--================ End About Us Area =================-->
 
-	<!--================ Start Portfolio Area =================-->
-	<section class="portfolio_area">
-		<div id="portfolio-content"></div>
+	<!-- Seção Portfólio -->
+	<section class="portfolio_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="main_title text-left">
+						<h2>Qualidade de Trabalho<br>Projetos recentes</h2>
+					</div>
+				</div>
+			</div>
+			<div class="filters portfolio-filter">
+				<ul>
+					<li class="active" data-filter="*">todos</li>
+					<li data-filter=".popular">popular</li>
+					<li data-filter=".latest"> últimos</li>
+				</ul>
+			</div>
+			<div class="filters-content">
+				<div class="row portfolio-grid justify-content-center" id="projetos-container"></div>
+			</div>
+		</div>
 	</section>
-	<!--================ End Portfolio Area =================-->
 
-	<!-- Footer Component -->
+	<!-- Seção Certificações -->
+	<section class="certificates_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="main_title text-left">
+						<h2>Minhas Certificações</h2>
+					</div>
+				</div>
+			</div>
+			<div class="row" id="certificados-container"></div>
+		</div>
+	</section>
+
+	<!-- Footer -->
 	<div id="footer"></div>
 
-	<!-- Load Components -->
+	<!-- Carregamento de Componentes -->
 	<script>
 		$(document).ready(function () {
-			// Carrega componentes principais primeiro
 			Promise.all([
 				$("#header").load("./components/header.html"),
 				$("#home-banner").load("./components/home-banner.html"),
 				$("#footer").load("./components/footer.html"),
-				$("#about").load("./about.html"),
-				$("#portfolio-content").load("./portfolio.html")
+				$("#about").load("./about.html")
 			]).then(() => {
-				// Carrega scripts comuns
 				$("#scripts").load("./components/scripts.html", () => {
-					// Carrega script específico do portfolio
 					$.getScript("js/portfolioManager.js")
-						.fail(() => console.error("Falha ao carregar portfolioManager.js"));
+						.done(() => window.portfolioManager.init())
+						.fail(() => console.error("Falha ao carregar portfolioManager"));
 				});
 			}).catch((error) => {
 				console.error("Erro ao carregar componentes:", error);
@@ -64,13 +90,8 @@
 		});
 	</script>
 
-	<!-- Common Scripts -->
+	<!-- Scripts Comuns -->
 	<div id="scripts"></div>
-	<script>
-		$(function () {
-			$("#scripts").load("./components/scripts.html");
-		});
-	</script>
 </body>
 
 </html>

@@ -3307,3 +3307,19 @@ h6 {
 /*---------------------------------------------------- */
 
 /*# sourceMappingURL=style.css.map */
+
+
+.portfolio_box {
+	margin-bottom: 30px;
+	position: relative;
+}
+
+.certificates_area .card {
+	margin: 15px 0;
+	box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* Garanta espaçamento entre seções */
+section {
+	padding: 60px 0;
+}
