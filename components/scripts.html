@@ -1,4 +1,7 @@
-<!-- Optional JavaScript -->
+<!-- Carregando jQuery antes dos scripts que dependem dele -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Seus scripts -->
 <script src="js/popper.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/stellar.js"></script>
@@ -11,5 +14,6 @@
 <script src="js/mail-script.js"></script>
 <script src="js/gmaps.min.js"></script>
 <script src="js/theme.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="js/portfolioManager.js"></script>
+
+<!-- Carregue seu script apenas depois de jQuery -->
+<script src="/js/portfolioManager.js"></script>
