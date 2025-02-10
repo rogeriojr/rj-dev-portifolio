@@ -1,92 +1,148 @@
-// Função para carregar dados
-async function carregarDados() {
-  try {
-    const [projetosRes, certificadosRes] = await Promise.all([
-      fetch("json/projetos/desenvolvimento.json"),
-      fetch("json/certificados/certificados.json"),
-    ]);
+/**
+ * =============================================
+ *          GERENCIADOR DE PORTFÓLIO
+ * =============================================
+ *
+ * Responsável por:
+ * - Carregar dados de projetos e certificados
+ * - Renderizar conteúdo dinâmico
+ * - Gerenciar filtros
+ */
 
-    const projetos = await projetosRes.json();
-    const certificados = await certificadosRes.json();
+// Configuração Principal
+const config = {
+  endpoints: {
+    projetos: "json/projetos/desenvolvimento.json",
+    certificados: "json/certificados/certificados.json",
+  },
+  selectors: {
+    projetos: "#projetos-container",
+    certificados: "#certificados-container",
+    isotopeGrid: ".portfolio-grid",
+  },
+};
 
-    return {
-      projetos: projetos.projetos || projetos,
-      certificados: certificados.certificados || certificados,
-    };
-  } catch (error) {
-    console.error("Erro ao carregar dados:", error);
-    return { projetos: [], certificados: [] };
-  }
-}
-
-// Renderizar Projetos
-async function renderizarProjetos() {
-  const dados = await carregarDados();
-  const container = document.getElementById("projetos-container");
-
-  container.innerHTML = dados.projetos
-    .map(
-      (projeto) => `
-      <div class="col-lg-4 col-md-6 all ${projeto.categoria}">
-          <div class="portfolio_box">
-              <div class="single_portfolio">
-                  <img class="img-fluid w-100" src="${projeto.imagem}" alt="${
-        projeto.titulo
-      }">
-                  <div class="overlay"></div>
-                  <a href="${projeto.imagem}" class="img-gal">
-                      <div class="icon"><span class="lnr lnr-cross"></span></div>
-                  </a>
-              </div>
-              <div class="short_info">
-                  <h4>${projeto.titulo}</h4>
-                  <p>${projeto.descricao}</p>
-                  ${projeto.links
-                    ?.map(
-                      (link) => `
-                      <p><a href="${link.url}" target="_blank">${link.texto}</a></p>
-                  `
-                    )
-                    .join("")}
-              </div>
-          </div>
-      </div>
-  `
-    )
-    .join("");
-}
-
-// Renderizar Certificados
-async function renderizarCertificados() {
-  const dados = await carregarDados();
-  const container = document.getElementById("certificados-container");
-
-  container.innerHTML = dados.certificados
-    .map(
-      (cert) => `
-      <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="card h-100">
-              <img src="${cert.imagem}" class="card-img-top" alt="${cert.titulo}">
-              <div class="card-body">
-                  <h5 class="card-title">${cert.titulo}</h5>
-              </div>
-          </div>
-      </div>
-  `
-    )
-    .join("");
-}
-
-// Inicialização
+/**
+ * Função principal de inicialização
+ */
 window.portfolioManager = {
   init: function () {
-    renderizarProjetos();
-    renderizarCertificados();
-    this.initIsotope();
+    this.renderizarProjetos()
+      .then(() => this.initIsotope())
+      .catch(console.error);
+
+    this.renderizarCertificados().catch(console.error);
   },
 
+  /**
+   * Carrega dados dos arquivos JSON
+   */
+  carregarDados: async function () {
+    try {
+      const [projetosRes, certificadosRes] = await Promise.all([
+        fetch(config.endpoints.projetos),
+        fetch(config.endpoints.certificados),
+      ]);
+
+      return {
+        projetos: await projetosRes.json(),
+        certificados: await certificadosRes.json(),
+      };
+    } catch (error) {
+      console.error("Erro na carga de dados:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Renderiza projetos na página
+   */
+  renderizarProjetos: async function () {
+    const container = document.querySelector(config.selectors.projetos);
+
+    try {
+      const { projetos } = await this.carregarDados();
+
+      container.innerHTML = projetos
+        .map(
+          (projeto) => `
+              <div class="col-lg-4 col-md-6 all ${projeto.categoria}">
+                  <div class="portfolio_box">
+                      <div class="single_portfolio">
+                          <img class="img-fluid w-100" 
+                               src="${projeto.imagem}" 
+                               alt="${projeto.titulo}"
+                               loading="lazy">
+                          <div class="overlay"></div>
+                          <a href="${projeto.imagem}" class="img-gal">
+                              <div class="icon"><span class="lnr lnr-cross"></span></div>
+                          </a>
+                      </div>
+                      <div class="short_info">
+                          <h4>${projeto.titulo}</h4>
+                          <p>${projeto.descricao}</p>
+                          ${projeto.links
+                            ?.map(
+                              (link) => `
+                              <p><a href="${link.url}" target="_blank" rel="noopener">${link.texto}</a></p>
+                          `
+                            )
+                            .join("")}
+                      </div>
+                  </div>
+              </div>
+          `
+        )
+        .join("");
+    } catch (error) {
+      container.innerHTML = `
+              <div class="col-12 text-center py-5">
+                  <div class="alert alert-danger">Erro ao carregar projetos</div>
+              </div>
+          `;
+    }
+  },
+
+  /**
+   * Renderiza certificações na página
+   */
+  renderizarCertificados: async function () {
+    const container = document.querySelector(config.selectors.certificados);
+
+    try {
+      const { certificados } = await this.carregarDados();
+
+      container.innerHTML = certificados
+        .map(
+          (cert) => `
+              <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                  <div class="card h-100 shadow-sm">
+                      <img src="${cert.imagem}" 
+                           class="card-img-top" 
+                           alt="${cert.titulo}"
+                           loading="lazy">
+                      <div class="card-body">
+                          <h5 class="card-title">${cert.titulo}</h5>
+                      </div>
+                  </div>
+              </div>
+          `
+        )
+        .join("");
+    } catch (error) {
+      container.innerHTML = `
+              <div class="col-12 text-center py-5">
+                  <div class="alert alert-danger">Erro ao carregar certificados</div>
+              </div>
+          `;
+    }
+  },
+
+  /**
+   * Inicializa o sistema de filtros Isotope
+   */
   initIsotope: function () {
-    const $grid = $(".portfolio-grid").isotope({
+    const $grid = $(config.selectors.isotopeGrid).isotope({
       itemSelector: ".all",
       percentPosition: true,
       masonry: {
