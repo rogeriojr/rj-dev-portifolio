@@ -29,19 +29,26 @@ async function carregarDados() {
 
 // Função para renderizar projetos na página
 async function renderizarProjetos() {
+  console.log("🔄 Iniciando renderização de projetos...");
   const dados = await carregarDados();
+
   const container = document.getElementById("projetos-container");
+  if (!container) {
+    console.error("❌ ERRO: Elemento `#projetos-container` não encontrado!");
+    return;
+  }
+
   container.innerHTML = ""; // Limpa antes de adicionar novos itens
 
-  if (!Array.isArray(dados.projetos)) {
-    console.error(
-      "❌ ERRO: `dados.projetos` não é um array válido!",
-      dados.projetos
+  if (!Array.isArray(dados.projetos) || dados.projetos.length === 0) {
+    console.warn(
+      "⚠ Nenhum projeto encontrado ou `dados.projetos` não é um array válido."
     );
     return;
   }
 
   dados.projetos.forEach((projeto) => {
+    console.log("🖼 Adicionando projeto:", projeto.titulo);
     const projetoHTML = `
       <div class="col-lg-4 col-md-6 all ${projeto.categoria}">
         <div class="portfolio_box">
@@ -73,19 +80,28 @@ async function renderizarProjetos() {
 
 // Função para renderizar certificados na página
 async function renderizarCertificados() {
+  console.log("🔄 Iniciando renderização de certificados...");
   const dados = await carregarDados();
+
   const container = document.getElementById("certificados-container");
+  if (!container) {
+    console.error(
+      "❌ ERRO: Elemento `#certificados-container` não encontrado!"
+    );
+    return;
+  }
+
   container.innerHTML = ""; // Limpa antes de adicionar novos itens
 
-  if (!Array.isArray(dados.certificados)) {
-    console.error(
-      "❌ ERRO: `dados.certificados` não é um array válido!",
-      dados.certificados
+  if (!Array.isArray(dados.certificados) || dados.certificados.length === 0) {
+    console.warn(
+      "⚠ Nenhum certificado encontrado ou `dados.certificados` não é um array válido."
     );
     return;
   }
 
   dados.certificados.forEach((cert) => {
+    console.log("🎖 Adicionando certificado:", cert.titulo);
     const certHTML = `
       <div class="col-md-4" style="margin-top: 10px;">
         <div class="card">
@@ -103,6 +119,7 @@ async function renderizarCertificados() {
 // Inicializa os projetos e certificados ao carregar a página
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ portfolioManager.js carregado!");
+  console.log("✅ Evento `DOMContentLoaded` acionado!");
   renderizarProjetos();
   renderizarCertificados();
 });
