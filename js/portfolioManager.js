@@ -1,5 +1,4 @@
-// Função para carregar dados do localStorage
-// Carregar dados de arquivos JSON
+// Função para carregar dados dos JSONs e localStorage
 async function carregarDados() {
   try {
     const [projetosRes, certificadosRes] = await Promise.all([
@@ -7,13 +6,17 @@ async function carregarDados() {
       fetch("/json/certificados/certificados.json"),
     ]);
 
+    if (!projetosRes.ok || !certificadosRes.ok) {
+      throw new Error("Erro ao carregar um dos JSONs");
+    }
+
     return {
       projetos: await projetosRes.json(),
       certificados: await certificadosRes.json(),
     };
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
-    return { projetos: [], certificados: [] };
+    return { projetos: [], certificados: [] }; // Retorna arrays vazios para evitar erro
   }
 }
 
@@ -22,46 +25,55 @@ function salvarDados(dados) {
   localStorage.setItem("portfolioData", JSON.stringify(dados));
 }
 
-// Função para renderizar projetos
-function renderizarProjetos() {
-  const dados = carregarDados();
+// Função para renderizar projetos de forma assíncrona
+async function renderizarProjetos() {
+  const dados = await carregarDados(); // Aguarda os dados serem carregados
   const container = $("#projetos-container");
   container.empty();
 
+  if (!Array.isArray(dados.projetos)) {
+    console.error("Erro: projetos não é um array válido.");
+    return;
+  }
+
   dados.projetos.forEach((projeto) => {
     const projetoHTML = `
-          <div class="col-lg-4 col-md-6 all ${projeto.categoria}">
-              <div class="portfolio_box">
-                  <div class="single_portfolio">
-                      <img class="img-fluid w-100" src="${
-                        projeto.imagem
-                      }" alt="${projeto.titulo}">
-                      <div class="overlay"></div>
-                      <a href="${projeto.imagem}" class="img-gal">
-                          <div class="icon">
-                              <span class="lnr lnr-cross"></span>
-                          </div>
-                      </a>
-                  </div>
-                  <div class="short_info">
-                      <h4>${projeto.titulo}</h4>
-                      <p>${projeto.descricao}</p>
-                      ${projeto.links
-                        .map(
-                          (link) =>
-                            `<p><a href="${link.url}" target="_blank">${link.texto}</a></p>`
-                        )
-                        .join("")}
-                  </div>
+      <div class="col-lg-4 col-md-6 all ${projeto.categoria}">
+        <div class="portfolio_box">
+          <div class="single_portfolio">
+            <img class="img-fluid w-100" src="${projeto.imagem}" alt="${
+      projeto.titulo
+    }">
+            <div class="overlay"></div>
+            <a href="${projeto.imagem}" class="img-gal">
+              <div class="icon">
+                <span class="lnr lnr-cross"></span>
               </div>
+            </a>
           </div>
-      `;
+          <div class="short_info">
+            <h4>${projeto.titulo}</h4>
+            <p>${projeto.descricao}</p>
+            ${
+              projeto.links
+                ? projeto.links
+                    .map(
+                      (link) =>
+                        `<p><a href="${link.url}" target="_blank">${link.texto}</a></p>`
+                    )
+                    .join("")
+                : ""
+            }
+          </div>
+        </div>
+      </div>
+    `;
     container.append(projetoHTML);
   });
 }
 
 // Formulário de cadastro
-$("#formProjeto").submit(function (e) {
+$("#formProjeto").submit(async function (e) {
   e.preventDefault();
 
   const novoProjeto = {
@@ -78,7 +90,7 @@ $("#formProjeto").submit(function (e) {
       }),
   };
 
-  const dados = carregarDados();
+  const dados = await carregarDados();
   dados.projetos.push(novoProjeto);
   salvarDados(dados);
 
@@ -90,6 +102,6 @@ $("#formProjeto").submit(function (e) {
 });
 
 // Carrega os projetos ao iniciar
-$(document).ready(function () {
-  renderizarProjetos();
+$(document).ready(() => {
+  renderizarProjetos(); // Agora é assíncrono
 });
