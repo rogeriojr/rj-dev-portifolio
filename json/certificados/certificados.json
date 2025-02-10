@@ -1,0 +1,52 @@
+{
+  "certificados": [
+    {
+      "titulo": "NLW Unite - Fullstack",
+      "imagem": "img/certificate/NLW Unite - Fullstack.jpg"
+    },
+    {
+      "titulo": "NLW Unite - DevOps",
+      "imagem": "img/certificate/NLW Unite - DevOps.jpg"
+    },
+    {
+      "titulo": "NLW Unite - Nodejs",
+      "imagem": "img/certificate/NLW Unite - Nodejs.jpg"
+    },
+    {
+      "titulo": "NLW Unite - Reactjs",
+      "imagem": "img/certificate/NLW Unite - Reactjs.jpg"
+    },
+    {
+      "titulo": "NLW Unite - React Native",
+      "imagem": "img/certificate/NLW Unite - React Native.jpg"
+    },
+    {
+      "titulo": "HTML BÁSICO-11 HRS",
+      "imagem": "img/certificate/HTML BÁSICO-11 HRS.jpg"
+    },
+    {
+      "titulo": "HTML AVANÇADO - 6 HRS",
+      "imagem": "img/certificate/HTML AVANÇADO - 6 HRS.jpg"
+    },
+    {
+      "titulo": "INTRO A INFORMATICA - 20 HRS",
+      "imagem": "img/certificate/INTRO A INFORMATICA - 20 HRS.jpg"
+    },
+    {
+      "titulo": "ILUSTRAÇÃO E DG PARA WEB - 25 HRS",
+      "imagem": "img/certificate/ILUSTRAÇÃO E DG PARA WEB - 25 HRS.jpg"
+    },
+    {
+      "titulo": "J2ME - 54 HRS",
+      "imagem": "img/certificate/J2ME - 54 HRS.jpg"
+    },
+    {
+      "titulo": "PROGRAMAÇÃO EM C# - 117 HRS",
+      "imagem": "img/certificate/PROGRAMAÇÃO EM C.jpg"
+    },
+    {
+      "titulo": "INTRO A FOTOGRAFIA DIG - 27 HRS",
+      "imagem": "img/certificate/INTRO A FOTOGRAFIA DIG - 27 HRS.jpg"
+    }
+  ]
+}
