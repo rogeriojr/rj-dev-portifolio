@@ -2,133 +2,147 @@
 <html lang="pt-br">
 
 <head>
-	<!-- Cabeçalho existente mantido -->
-	<!-- ... -->
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="icon" href="img/favicon.png" type="image/png">
+	<title>Portfólio</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="vendors/linericon/style.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
+	<!-- main css -->
+	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-	<!-- Seção de Portfólio modificada -->
+	<!-- Seção de Portfólio -->
 	<section class="portfolio_area" id="portfolio">
 		<div class="container" style="padding-bottom: 60px;">
-			<!-- ... -->
-			<div class="filters-content">
-				<div class="row portfolio-grid justify-content-center" id="projetos-container">
-					<!-- Projetos serão renderizados aqui via JavaScript -->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="main_title text-left">
+						<h2>Qualidade de Trabalho<br>Projetos recentes</h2>
+					</div>
 				</div>
+			</div>
+			<div class="filters portfolio-filter">
+				<ul>
+					<li class="active" data-filter="*">todos</li>
+					<li data-filter=".popular">popular</li>
+					<li data-filter=".latest"> últimos</li>
+				</ul>
+			</div>
+			<div class="filters-content">
+				<div class="row portfolio-grid justify-content-center" id="projetos-container"></div>
 			</div>
 		</div>
 	</section>
 
-	<!-- Seção de Certificações modificada -->
+	<!-- Seção de Certificações -->
 	<section class="container">
 		<h2>Minhas Certificações</h2>
-		<div class="row" id="certificados-container">
-			<!-- Certificados serão renderizados aqui via JavaScript -->
-		</div>
+		<div class="row" id="certificados-container"></div>
 	</section>
 
-	<!-- Adicione este script antes do fechamento do body -->
+	<!-- Scripts -->
 	<script>
-		// Dados iniciais
-		const initialData = {
-			projetos: [
-				{
-					"titulo": "Mini Mega Leitor",
-					"categoria": "latest",
-					"descricao": "Ensino",
-					"imagem": "https://app.minimegaleitor.com.br/static/media/logo_black.41be15a5.png",
-					"links": [
-						{ "texto": "Instagram Oficial", "url": "https://www.instagram.com/minimegaleitor/" },
-						{ "texto": "App Android", "url": "https://play.google.com/store/apps/details?id=com.minimegaleitor&hl=pt&gl=US" },
-						{ "texto": "App IOS", "url": "https://apps.apple.com/kg/app/mini-mega-leitor/id1507195654" }
-					]
-				},
-				// Adicione outros projetos seguindo o mesmo formato
-			],
-			certificados: [
-				{
-					"titulo": "NLW Unite - Fullstack",
-					"imagem": "img/certificate/NLW Unite - Fullstack.jpg"
-				},
-				{
-					"titulo": "NLW Unite - DevOps",
-					"imagem": "img/certificate/NLW Unite - DevOps.jpg"
-				},
-				// Adicione outros certificados
-			]
-		};
+		// Função para carregar dados dos JSONs
+		async function carregarDados() {
+			try {
+				const [projetosRes, certificadosRes] = await Promise.all([
+					fetch('/json/projetos/desenvolvimento/desenvolvimento.json'),
+					fetch('/json/certificados/certificados.json')
+				]);
 
-		// Gerenciamento de localStorage
-		function initLocalStorage() {
-			if (!localStorage.getItem('portfolioData')) {
-				localStorage.setItem('portfolioData', JSON.stringify(initialData));
+				return {
+					projetos: await projetosRes.json(),
+					certificados: await certificadosRes.json()
+				};
+			} catch (error) {
+				console.error('Erro ao carregar dados:', error);
+				return { projetos: [], certificados: [] };
 			}
 		}
 
-		function getPortfolioData() {
-			return JSON.parse(localStorage.getItem('portfolioData'));
-		}
-
-		function savePortfolioData(data) {
-			localStorage.setItem('portfolioData', JSON.stringify(data));
-		}
-
-		// Renderização
-		function renderProjetos() {
-			const data = getPortfolioData();
-			const container = $('#projetos-container');
-			container.empty();
-
-			data.projetos.forEach(projeto => {
-				const linksHTML = projeto.links.map(link =>
+		// Renderizar projetos
+		function renderizarProjetos(projetos) {
+			const container = document.getElementById('projetos-container');
+			container.innerHTML = projetos.projetos.map(projeto => `
+				<div class="col-lg-4 col-md-6 all ${projeto.categoria}" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin: 0px;">
+					<div class="portfolio_box">
+						<div class="single_portfolio">
+							${projeto.imagem.includes('base64') ?
+					`<img class="img-fluid w-100" src="${projeto.imagem}" alt="${projeto.titulo}">` :
+					`<div style="background-color: #777777; padding: 20px;">
+									<img class="img-fluid w-100" src="${projeto.imagem}" alt="${projeto.titulo}">
+								</div>`
+				}
+							<div class="overlay"></div>
+							<a href="${projeto.imagem}" class="img-gal">
+								<div class="icon">
+									<span class="lnr lnr-cross"></span>
+								</div>
+							</a>
+						</div>
+						<div class="short_info">
+							<h4>${projeto.titulo}</h4>
+							<p>${projeto.descricao}</p>
+							${projeto.links.map(link =>
 					`<p><a href="${link.url}" target="_blank">${link.texto}</a></p>`
-				).join('');
-
-				const projetoHTML = `
-                <div class="col-lg-4 col-md-6 all ${projeto.categoria}">
-                    <!-- Estrutura do projeto aqui -->
-                    ${linksHTML}
-                </div>
-            `;
-				container.append(projetoHTML);
-			});
+				).join('')}
+						</div>
+					</div>
+				</div>
+			`).join('');
 		}
 
-		function renderCertificados() {
-			const data = getPortfolioData();
-			const container = $('#certificados-container');
-			container.empty();
-
-			data.certificados.forEach(certificado => {
-				const certHTML = `
-                <div class="col-md-4" style="margin-top: 10px;">
-                    <div class="card">
-                        <img src="${certificado.imagem}" class="card-img-top" alt="${certificado.titulo}">
-                        <div class="card-body">
-                            <h5 class="card-title">${certificado.titulo}</h5>
-                        </div>
-                    </div>
-                </div>
-            `;
-				container.append(certHTML);
-			});
+		// Renderizar certificados
+		function renderizarCertificados(certificados) {
+			const container = document.getElementById('certificados-container');
+			container.innerHTML = certificados.certificados.map(cert => `
+				<div class="col-md-4" style="margin-top: 10px;">
+					<div class="card">
+						<img src="${cert.imagem}" class="card-img-top" alt="${cert.titulo}">
+						<div class="card-body">
+							<h5 class="card-title">${cert.titulo}</h5>
+						</div>
+					</div>
+				</div>
+			`).join('');
 		}
 
 		// Inicialização
-		$(document).ready(function () {
-			initLocalStorage();
-			renderProjetos();
-			renderCertificados();
-		});
+		document.addEventListener('DOMContentLoaded', async () => {
+			try {
+				const dados = await carregarDados();
+				renderizarProjetos(dados.projetos);
+				renderizarCertificados(dados.certificados);
 
-		// Função para adicionar novo projeto (exemplo)
-		function addProjeto(novoProjeto) {
-			const data = getPortfolioData();
-			data.projetos.push(novoProjeto);
-			savePortfolioData(data);
-			renderProjetos();
-		}
+				// Ativa os filtros (mantenha sua lógica existente de filtragem aqui)
+				$('.portfolio-filter li').on('click', function () {
+					$('.portfolio-filter li').removeClass('active');
+					$(this).addClass('active');
+
+					const selector = $(this).attr('data-filter');
+					$('.portfolio-grid').isotope({
+						filter: selector
+					});
+				});
+			} catch (error) {
+				console.error('Erro na inicialização:', error);
+			}
+		});
 	</script>
+
+	<!-- Scripts de terceiros -->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/popper.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="vendors/isotope/isotope-min.js"></script>
 </body>
 
 </html>
