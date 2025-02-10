@@ -1,0 +1,176 @@
+{
+  "projetos": [
+    {
+      "titulo": "Mini Mega Leitor",
+      "categoria": "latest",
+      "descricao": "Ensino",
+      "imagem": "https://app.minimegaleitor.com.br/static/media/logo_black.41be15a5.png",
+      "links": [
+        {
+          "texto": "Instagram Oficial",
+          "url": "https://www.instagram.com/minimegaleitor/"
+        },
+        {
+          "texto": "App Android",
+          "url": "https://play.google.com/store/apps/details?id=com.minimegaleitor&hl=pt&gl=US"
+        },
+        {
+          "texto": "App IOS",
+          "url": "https://apps.apple.com/kg/app/mini-mega-leitor/id1507195654"
+        }
+      ]
+    },
+    {
+      "titulo": "Meu Social Post",
+      "categoria": "latest",
+      "descricao": "Design, Branding, Postagens, Serviços",
+      "imagem": "https://is2-ssl.mzstatic.com/image/thumb/Purple116/v4/93/82/c1/9382c1b2-d4f9-d6d8-6750-816687b1a064/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg",
+      "links": [
+        {
+          "texto": "Site Oficial",
+          "url": "https://lp.meusocialpost.com.br/especial-meu-social-post/?hsrc=eW91dHViZQ%3D%3D"
+        },
+        {
+          "texto": "Facebook Oficial",
+          "url": "https://www.facebook.com/meusocialpost/?locale=pt_BR"
+        },
+        {
+          "texto": "Instagram Oficial",
+          "url": "https://www.instagram.com/meusocialpost.app/"
+        },
+        {
+          "texto": "Youtube Oficial",
+          "url": "https://www.youtube.com/@MeuSocialPost"
+        },
+        {
+          "texto": "App Android",
+          "url": "https://play.google.com/store/apps/details?id=com.febracis.msp&hl=pt_BR&gl=US"
+        },
+        {
+          "texto": "App IOS",
+          "url": "https://apps.apple.com/br/app/meu-social-post/id1544436956"
+        }
+      ]
+    },
+    {
+      "titulo": "Jornada Ser",
+      "categoria": "latest",
+      "descricao": "Ensino",
+      "imagem": "https://s3.amazonaws.com/static.febracis.com.br/wp-content/uploads/2022/06/07100645/Elementos-LP-Jornada-SERLogo-Jornada-Ser.png",
+      "links": [
+        {
+          "texto": "Site Oficial",
+          "url": "https://digital.febracis.com/programa-jornada-ser-2022/"
+        },
+        {
+          "texto": "App Android",
+          "url": "https://play.google.com/store/apps/details?id=br.com.jornadaser"
+        },
+        {
+          "texto": "App IOS",
+          "url": "https://apps.apple.com/br/app/jornada-ser/id1606016974"
+        }
+      ]
+    },
+    {
+      "titulo": "Metodo CIS",
+      "categoria": "latest",
+      "descricao": "Ensino, Cursos",
+      "imagem": "https://static.febracis.com.br/wp-content/uploads/2023/06/22183425/febracis_metodocis_2023_img_footer_logo_dm_optimized.png",
+      "links": [
+        { "texto": "Site Oficial", "url": "https://go.metodocis.com/l/cis/" },
+        {
+          "texto": "App Android (Descontinuado)",
+          "url": "https://play.google.com/store/apps/details?id=com.app2sales.febracis&hl=pt_PT"
+        },
+        {
+          "texto": "App IOS",
+          "url": "https://apps.apple.com/br/app/m%C3%A9todo-cis-febracis/id1150459679"
+        }
+      ]
+    },
+    {
+      "titulo": "Portal tem poder quem age",
+      "categoria": "latest",
+      "descricao": "Ensino, Cursos",
+      "imagem": "https://d9hhrg4mnvzow.cloudfront.net/pv.portaltempoderquemage.com.br/nova-plataforma-un/8dac6d11-nova-logo-portal-versao-branca_105d01o000000000000028.png",
+      "links": [
+        {
+          "texto": "Site Oficial",
+          "url": "https://pv.portaltempoderquemage.com.br/"
+        },
+        {
+          "texto": "App Android",
+          "url": "https://play.google.com/store/apps/details?id=com.febracis.ptpqa2"
+        },
+        {
+          "texto": "App IOS",
+          "url": "https://apps.apple.com/br/app/portal-tem-poder-quem-age-2-0/id1533143921"
+        }
+      ]
+    },
+    {
+      "titulo": "Simer Pay",
+      "categoria": "popular",
+      "descricao": "Vendas, Energia, E-Commerce",
+      "imagem": "https://simerpay-cdn.site.sensiconnect.io/images/shopping/1/small/simerpay.png",
+      "links": [
+        {
+          "texto": "Site Oficial",
+          "url": "https://simerpay.site.sensiconnect.io/"
+        },
+        {
+          "texto": "App Android",
+          "url": "https://play.google.com/store/apps/details?id=com.simerpay&hl=uz&gl=US"
+        },
+        {
+          "texto": "App IOS",
+          "url": "https://apps.apple.com/br/app/simer-pay/id1590387388?l=en"
+        }
+      ]
+    },
+    {
+      "titulo": "Autoconect",
+      "categoria": "popular",
+      "descricao": "Vendas, Seguros, Corretagem",
+      "imagem": "https://autoconect.com.br/images/logo-autoconect-header.png",
+      "links": [
+        { "texto": "Site Oficial", "url": "https://autoconect.com.br/" },
+        {
+          "texto": "App Android",
+          "url": "https://play.google.com/store/apps/details?id=com.autoconect"
+        },
+        {
+          "texto": "App IOS",
+          "url": "https://apps.apple.com/us/app/autoconect/id1617136585"
+        }
+      ]
+    },
+    {
+      "titulo": "Plantão Extra",
+      "categoria": "popular",
+      "descricao": "Saúde, Humanitário",
+      "imagem": "data:image/jpeg;base64,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",
+      "links": [
+        { "texto": "Site Oficial", "url": "https://bemanager.com.br/" },
+        {
+          "texto": "App Android (Já no Rebranding)",
+          "url": "https://play.google.com/store/apps/details?id=com.plantaoextra&hl=pt_BR&gl=US"
+        },
+        {
+          "texto": "App IOS (Já no Rebranding)",
+          "url": "https://apps.apple.com/br/app/be-manager/id1469559035"
+        }
+      ]
+    },
+    {
+      "titulo": "Bevas WM",
+      "categoria": "popular",
+      "descricao": "Trade",
+      "imagem": "https://bevas.com.br/wp-content/themes/bevastema/assets/img/Bervas_negativo3.svg",
+      "links": [
+        { "texto": "Site Oficial", "url": "https://bevas.com.br/home-video/" }
+      ]
+    }
+  ]
+}
