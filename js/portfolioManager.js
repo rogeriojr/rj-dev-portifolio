@@ -1,12 +1,12 @@
 // Função para carregar dados dos JSONs
-// Função para carregar dados dos JSONs
 async function carregarDados() {
   try {
     console.log("🔄 Buscando dados dos JSONs...");
 
+    // Altere para caminhos relativos
     const [projetosRes, certificadosRes] = await Promise.all([
-      fetch("/json/projetos/desenvolvimento.json"),
-      fetch("/json/certificados/certificados.json"),
+      fetch("json/projetos/desenvolvimento.json"),
+      fetch("json/certificados/certificados.json"),
     ]);
 
     if (!projetosRes.ok || !certificadosRes.ok) {
@@ -127,9 +127,21 @@ async function renderizarCertificados() {
 }
 
 // Inicializa os projetos e certificados ao carregar a página
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ portfolioManager.js carregado!");
-  console.log("✅ Evento `DOMContentLoaded` acionado!");
-  renderizarProjetos();
-  renderizarCertificados();
-});
+// Remova o event listener DOMContentLoaded
+// document.addEventListener("DOMContentLoaded", () => {
+
+// Exporte as funções para acesso externo
+window.portfolioManager = {
+  init: function () {
+    console.log("✅ portfolioManager.js inicializado!");
+    this.renderizarProjetos();
+    this.renderizarCertificados();
+  },
+  renderizarProjetos: renderizarProjetos,
+  renderizarCertificados: renderizarCertificados,
+};
+
+// Chame init automaticamente apenas se carregado diretamente
+if (document.getElementById("projetos-container")) {
+  window.portfolioManager.init();
+}

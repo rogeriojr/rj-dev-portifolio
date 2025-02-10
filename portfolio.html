@@ -54,7 +54,13 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="vendors/isotope/isotope-min.js"></script>
 	<!-- Carrega o script do gerenciador de portfólio -->
-	<script src="/js/portfolioManager.js"></script>
+	<script src="js/portfolioManager.js"></script>
+	<!-- Adicione um script de inicialização no final -->
+	<script>
+		if (window.portfolioManager) {
+			window.portfolioManager.init();
+		}
+	</script>
 </body>
 
 </html>
