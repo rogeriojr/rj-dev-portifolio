@@ -18,165 +18,210 @@
 
 	<!-- Estilos customizados -->
 	<style>
+		/* ==================== VARIÁVEIS DE DESIGN ==================== */
+		:root {
+			--cor-primaria: #2A2A2A;
+			--cor-destaque: #6C63FF;
+			--sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.1);
+			--transicao-padrao: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+		}
+
 		/* ==================== ESTRUTURA PRINCIPAL ==================== */
 		.portfolio_box {
-			background: #fff;
-			border-radius: 15px;
-			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-			transition: all 0.3s ease;
+			background: #FFFFFF;
+			border-radius: 18px;
+			box-shadow: var(--sombra-suave);
+			transition: var(--transicao-padrao);
 			overflow: hidden;
-			margin-bottom: 30px;
+			margin-bottom: 2rem;
+			position: relative;
 		}
 
 		.portfolio_box:hover {
-			transform: translateY(-5px);
-			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+			transform: translateY(-8px);
+			box-shadow: 0 12px 24px rgba(108, 99, 255, 0.15);
 		}
 
-		/* ==================== SEÇÃO DE IMAGENS DOS PROJETOS ==================== */
+		/* ==================== SEÇÃO DE IMAGENS ==================== */
 		.single_portfolio {
 			position: relative;
 			overflow: hidden;
-			background: #E4E4E4;
-			/* Cor de fundo para PNGs transparentes */
-			height: 300px;
-			/* Altura fixa para padronização */
+			height: 280px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			padding: 20px;
+			background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
 		}
 
 		.single_portfolio img {
-			max-width: 100%;
-			max-height: 250px;
-			/* Altura máxima reduzida para dar espaço ao fundo */
-			width: auto;
+			max-width: 85%;
+			max-height: 220px;
 			object-fit: contain;
-			/* Mantém a proporção sem cortar */
-			transition: transform 0.3s ease;
+			transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+			filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 		}
 
 		.single_portfolio:hover img {
-			transform: scale(1.05);
+			transform: scale(1.08) rotateZ(1deg);
 		}
 
-		/* ==================== OVERLAY E EFEITOS HOVER ==================== */
+		/* ==================== OVERLAY INTERATIVO ==================== */
 		.overlay {
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+			background: linear-gradient(180deg, rgba(42, 42, 42, 0) 0%, rgba(42, 42, 42, 0.85) 100%);
 			opacity: 0;
-			transition: opacity 0.3s ease;
+			transition: var(--transicao-padrao);
 		}
 
-		.single_portfolio:hover .overlay {
+		.portfolio_box:hover .overlay {
 			opacity: 1;
 		}
 
+		/* ==================== EFEITO DE FLUTUAÇÃO ==================== */
 		.img-gal {
 			position: absolute;
-			bottom: 20px;
+			bottom: -50px;
 			left: 50%;
 			transform: translateX(-50%);
-			color: #fff;
-			opacity: 0;
-			transition: all 0.3s ease;
+			color: white;
+			transition: var(--transicao-padrao);
+			display: flex;
+			align-items: center;
+			padding: 12px 24px;
+			background: rgba(255, 255, 255, 0.15);
+			border-radius: 30px;
+			backdrop-filter: blur(8px);
 		}
 
-		.single_portfolio:hover .img-gal {
-			opacity: 1;
+		.portfolio_box:hover .img-gal {
 			bottom: 30px;
+			opacity: 1;
 		}
 
-		/* ==================== SEÇÃO DE INFORMAÇÕES ==================== */
+		/* ==================== INFORMAÇÕES DO PROJETO ==================== */
 		.short_info {
-			padding: 25px;
+			padding: 1.5rem;
+			background: #FFFFFF;
+			position: relative;
+			z-index: 2;
 		}
 
 		.short_info h4 {
-			color: #2c2c2c;
-			font-size: 1.4rem;
-			margin-bottom: 15px;
-			font-weight: 600;
+			color: var(--cor-primaria);
+			font-size: 1.3rem;
+			margin-bottom: 0.8rem;
+			font-weight: 700;
+			letter-spacing: -0.5px;
 		}
 
 		.short_info p {
-			color: #666;
+			color: #6C757D;
 			font-size: 0.95rem;
-			line-height: 1.6;
-			margin-bottom: 15px;
+			line-height: 1.7;
+			margin-bottom: 1.2rem;
 		}
 
-		/* ==================== BOTÕES E LINKS ==================== */
+		/* ==================== BOTÕES INTERATIVOS ==================== */
 		.btn-link {
-			color: #2c2c2c;
-			text-decoration: none;
-			font-weight: 500;
-			position: relative;
-			padding: 5px 0;
-			transition: color 0.3s ease;
+			display: inline-flex;
+			align-items: center;
+			padding: 8px 16px;
+			border-radius: 8px;
+			background: rgba(108, 99, 255, 0.1);
+			color: var(--cor-destaque) !important;
+			transition: var(--transicao-padrao);
+			text-decoration: none !important;
+			margin: 4px 8px 4px 0;
 		}
 
 		.btn-link:hover {
-			color: #007bff;
+			background: var(--cor-destaque);
+			color: white !important;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(108, 99, 255, 0.25);
 		}
 
-		.btn-link::after {
-			content: '';
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			width: 0;
-			height: 2px;
-			background: #007bff;
-			transition: width 0.3s ease;
-		}
-
-		.btn-link:hover::after {
-			width: 100%;
-		}
-
-		/* ==================== CERTIFICADOS ==================== */
-		.certificate-image-container {
-			background: #E4E4E4;
-			/* Mesma cor de fundo dos projetos */
-			height: 250px;
-			/* Altura fixa para padronização */
-			padding: 20px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			border-radius: 10px 10px 0 0;
-		}
-
-		.card-img-top {
-			max-width: 100%;
-			max-height: 200px;
-			/* Altura reduzida considerando o padding */
-			width: auto;
-			object-fit: contain;
-			/* Garante proporção correta */
-		}
-
-		/* ==================== FILTROS ==================== */
+		/* ==================== FILTROS MODERNOS ==================== */
 		.portfolio-filter li {
-			cursor: pointer;
-			padding: 8px 20px;
-			border-radius: 25px;
-			margin: 0 5px;
-			transition: all 0.3s ease;
-			background: #f8f9fa;
-			color: #666;
+			padding: 10px 28px;
+			border-radius: 12px;
+			margin: 0 8px;
+			transition: var(--transicao-padrao);
+			background: rgba(108, 99, 255, 0.08);
+			color: #6C757D;
+			border: 2px solid transparent;
+			font-weight: 500;
 		}
 
 		.portfolio-filter li.active,
 		.portfolio-filter li:hover {
-			background: #007bff;
-			color: #fff;
+			background: var(--cor-destaque);
+			color: white !important;
+			border-color: rgba(255, 255, 255, 0.15);
+			transform: translateY(-2px);
+		}
+
+		/* ==================== CERTIFICADOS ==================== */
+		.certificate-image-container {
+			height: 220px;
+			padding: 1.5rem;
+			background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+			transition: var(--transicao-padrao);
+		}
+
+		.card {
+			border: none !important;
+			border-radius: 18px !important;
+			transition: var(--transicao-padrao);
+			cursor: pointer;
+		}
+
+		.card:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 12px 24px rgba(108, 99, 255, 0.1);
+		}
+
+		.card-img-top {
+			max-height: 180px;
+			object-fit: contain;
+			filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+		}
+
+		/* ==================== ANIMAÇÕES ==================== */
+		@keyframes float {
+
+			0%,
+			100% {
+				transform: translateY(0);
+			}
+
+			50% {
+				transform: translateY(-10px);
+			}
+		}
+
+		.img-gal .icon {
+			animation: float 2.5s ease-in-out infinite;
+		}
+
+		/* ==================== RESPONSIVIDADE ==================== */
+		@media (max-width: 768px) {
+			.portfolio_box {
+				margin-bottom: 1.5rem;
+			}
+
+			.single_portfolio {
+				height: 220px;
+			}
+
+			.btn-link {
+				width: 100%;
+				justify-content: center;
+			}
 		}
 	</style>
 </head>

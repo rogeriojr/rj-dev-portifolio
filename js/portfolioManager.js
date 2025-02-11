@@ -1,17 +1,15 @@
-/**
- * =============================================
- *          GERENCIADOR DE PORTFÓLIO
- * =============================================
- *
- * Responsável pelo carregamento dinâmico e
- * renderização de projetos e certificados
- *
- * Funcionalidades principais:
- * 1. Carregamento assíncrono de dados
- * 2. Renderização de cards responsivos
- * 3. Sistema de filtragem Isotope
- * 4. Tratamento de erros robusto
- */
+// =============================================
+//  GERENCIADOR DE PORTFÓLIO
+// =============================================
+
+// Responsável pelo carregamento dinâmico e
+// renderização de projetos e certificados
+
+// Funcionalidades principais:
+// 1. Carregamento assíncrono de dados
+// 2. Renderização de cards responsivos
+// 3. Sistema de filtragem Isotope
+// 4. Tratamento de erros robusto
 
 // Configurações globais
 const PORTFOLIO_CONFIG = {
@@ -66,9 +64,6 @@ window.portfolioManager = (function () {
 
   // Interface pública
   return {
-    /**
-     * Inicializa o portfólio
-     */
     init: function () {
       this.loadProjects()
         .then(() => this.initFilters())
@@ -79,9 +74,8 @@ window.portfolioManager = (function () {
       );
     },
 
-    /**
-     * Carrega e renderiza projetos
-     */
+    // Carrega e renderiza projetos
+
     loadProjects: async function () {
       try {
         const rawData = await _fetchData(PORTFOLIO_CONFIG.endpoints.projetos);
@@ -92,9 +86,8 @@ window.portfolioManager = (function () {
       }
     },
 
-    /**
-     * Carrega e renderiza certificados
-     */
+    //  Carrega e renderiza certificados
+
     loadCertificates: async function () {
       try {
         const rawData = await _fetchData(
@@ -109,9 +102,8 @@ window.portfolioManager = (function () {
       }
     },
 
-    /**
-     * Renderiza projetos no DOM
-     */
+    // Renderiza projetos no DOM
+
     renderProjects: function (projects) {
       const container = document.querySelector(
         PORTFOLIO_CONFIG.selectors.projetos
@@ -169,9 +161,8 @@ window.portfolioManager = (function () {
       }
     },
 
-    /**
-     * Renderiza certificados no DOM
-     */
+    // Renderiza certificados no DOM
+
     renderCertificates: function (certificates) {
       const container = document.querySelector(
         PORTFOLIO_CONFIG.selectors.certificados
@@ -206,9 +197,8 @@ window.portfolioManager = (function () {
       }
     },
 
-    /**
-     * Renderiza certificados no DOM
-     */
+    //  Renderiza certificados no DOM
+
     renderCertificates: function (certificates) {
       const container = document.querySelector(
         PORTFOLIO_CONFIG.selectors.certificados
@@ -243,9 +233,8 @@ window.portfolioManager = (function () {
       }
     },
 
-    /**
-     * Inicializa o sistema de filtros
-     */
+    //  Inicializa o sistema de filtros
+
     initFilters: function () {
       const gridElement = document.querySelector(
         PORTFOLIO_CONFIG.selectors.isotopeGrid
@@ -276,9 +265,8 @@ window.portfolioManager = (function () {
       });
     },
 
-    /**
-     * Manipulador global de erros
-     */
+    // Manipulador global de erros
+
     handleError: function (context, error) {
       console.error(`[${context.toUpperCase()}]`, error);
 
