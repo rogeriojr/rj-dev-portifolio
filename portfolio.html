@@ -34,12 +34,22 @@
 		.single_portfolio {
 			position: relative;
 			overflow: hidden;
+			background: #f8f9fa;
+			/* Fundo cinza claro */
+			border-radius: 15px 15px 0 0;
+			min-height: 250px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
 		}
 
 		.single_portfolio img {
-			width: 100%;
-			height: 250px;
-			object-fit: cover;
+			width: auto;
+			max-width: 100%;
+			max-height: 250px;
+			object-fit: contain;
+			/* Mantém proporção da imagem */
 			transition: transform 0.3s ease;
 		}
 
@@ -81,6 +91,25 @@
 			padding: 25px;
 		}
 
+		/* Ajustes para certificados */
+		.certificate-image-container {
+			background: #f8f9fa;
+			padding: 20px;
+			border-radius: 10px 10px 0 0;
+			min-height: 200px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.card-img-top {
+			max-width: 100%;
+			max-height: 180px;
+			width: auto;
+			object-fit: contain;
+		}
+
+		/* Outros estilos permanecem os mesmos */
 		.short_info h4 {
 			color: #2c2c2c;
 			font-size: 1.4rem;
@@ -123,7 +152,6 @@
 			width: 100%;
 		}
 
-		/* Filtros */
 		.portfolio-filter li {
 			cursor: pointer;
 			padding: 8px 20px;
@@ -144,7 +172,6 @@
 
 <body>
 	<!-- Seção de Portfólio -->
-	<!-- Seção de Projetos -->
 	<section class="portfolio_area" id="portfolio">
 		<div class="container">
 			<div class="row">
@@ -180,13 +207,175 @@
 	<script src="js/popper.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="vendors/isotope/isotope-min.js"></script>
-	<!-- Carrega o script do gerenciador de portfólio -->
-	<script src="js/portfolioManager.js"></script>
-	<!-- Adicione um script de inicialização no final -->
+	<!-- Script atualizado abaixo -->
 	<script>
-		if (window.portfolioManager) {
-			window.portfolioManager.init();
-		}
+		/**
+		 * =============================================
+		 *          GERENCIADOR DE PORTFÓLIO
+		 * =============================================
+		 */
+		const PORTFOLIO_CONFIG = {
+			endpoints: {
+				projetos: "json/projetos/desenvolvimento.json",
+				certificados: "json/certificados/certificados.json",
+			},
+			selectors: {
+				projetos: "#projetos-container",
+				certificados: "#certificados-container",
+				isotopeGrid: ".portfolio-grid",
+				filterButtons: ".portfolio-filter li",
+			},
+			classes: {
+				projectItem: "col-lg-4 col-md-6 all",
+				certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4",
+			},
+			styles: {
+				cardImageHeight: "200px",
+				defaultCategory: "all",
+			},
+		};
+
+		window.portfolioManager = (function () {
+			const _fetchData = async (endpoint) => {
+				try {
+					const response = await fetch(endpoint);
+					if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+					return await response.json();
+				} catch (error) {
+					console.error(`Falha no fetch: ${endpoint}`, error);
+					throw error;
+				}
+			};
+
+			const _validateDataStructure = (data, expectedKey) => {
+				if (!data[expectedKey]) throw new Error(`Chave '${expectedKey}' não encontrada`);
+				return data[expectedKey];
+			};
+
+			return {
+				init: function () {
+					this.loadProjects()
+						.then(() => this.initFilters())
+						.catch((error) => this.handleError("projetos", error));
+
+					this.loadCertificates().catch((error) =>
+						this.handleError("certificados", error)
+					);
+				},
+
+				loadProjects: async function () {
+					try {
+						const rawData = await _fetchData(PORTFOLIO_CONFIG.endpoints.projetos);
+						const projects = _validateDataStructure(rawData, "projetos");
+						this.renderProjects(projects);
+					} catch (error) {
+						throw new Error(`Falha no carregamento de projetos: ${error.message}`);
+					}
+				},
+
+				loadCertificates: async function () {
+					try {
+						const rawData = await _fetchData(PORTFOLIO_CONFIG.endpoints.certificados);
+						const certificates = _validateDataStructure(rawData, "certificados");
+						this.renderCertificates(certificates);
+					} catch (error) {
+						throw new Error(`Falha no carregamento de certificados: ${error.message}`);
+					}
+				},
+
+				renderProjects: function (projects) {
+					const container = document.querySelector(PORTFOLIO_CONFIG.selectors.projetos);
+					if (!container) throw new Error("Container de projetos não encontrado");
+
+					container.innerHTML = projects.map(project => `
+						<div class="${PORTFOLIO_CONFIG.classes.projectItem} ${project.categoria || ''}">
+							<div class="portfolio_box">
+								<div class="single_portfolio">
+									<img class="img-fluid w-100" 
+										src="${project.imagem}" 
+										alt="${project.titulo}"
+										loading="lazy"
+										onerror="this.style.display='none'">
+									<div class="overlay"></div>
+									<a href="${project.imagem}" class="img-gal">
+										<div class="icon"><span class="lnr lnr-cross"></span></div>
+									</a>
+								</div>
+								<div class="short_info">
+									<h4>${project.titulo}</h4>
+									<p class="text-muted">${project.descricao}</p>
+									${(project.links || []).map(link => `
+										<div class="link-container">
+											<a href="${link.url}" 
+												target="_blank" 
+												rel="noopener noreferrer"
+												class="btn-link">
+												<i class="fa fa-external-link mr-2"></i>${link.texto}
+											</a>
+										</div>
+									`).join("")}
+								</div>
+							</div>
+						</div>
+					`).join("");
+				},
+
+				renderCertificates: function (certificates) {
+					const container = document.querySelector(PORTFOLIO_CONFIG.selectors.certificados);
+					if (!container) throw new Error("Container de certificados não encontrado");
+
+					container.innerHTML = certificates.map(cert => `
+						<div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
+							<div class="card h-100 shadow-sm border-0">
+								<div class="certificate-image-container">
+									<img src="${cert.imagem}" 
+										class="card-img-top" 
+										alt="${cert.titulo}"
+										loading="lazy"
+										onerror="this.style.display='none'">
+								</div>
+								<div class="card-body text-center">
+									<h5 class="card-title font-weight-bold mb-0">${cert.titulo}</h5>
+								</div>
+							</div>
+						</div>
+					`).join("");
+				},
+
+				initFilters: function () {
+					const gridElement = document.querySelector(PORTFOLIO_CONFIG.selectors.isotopeGrid);
+					if (!gridElement || !window.Isotope) return;
+
+					$(document).ready(() => {
+						const isotopeGrid = new Isotope(gridElement, {
+							itemSelector: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
+							percentPosition: true,
+							masonry: { columnWidth: "." + PORTFOLIO_CONFIG.styles.defaultCategory }
+						});
+
+						$(PORTFOLIO_CONFIG.selectors.filterButtons).on("click", function () {
+							$(this).parent().find(".active").removeClass("active");
+							$(this).addClass("active");
+							isotopeGrid.arrange({ filter: $(this).attr("data-filter") || "*" });
+						});
+					});
+				},
+
+				handleError: function (context, error) {
+					console.error(`[${context.toUpperCase()}]`, error);
+					const container = document.querySelector(PORTFOLIO_CONFIG.selectors[context]);
+					if (!container) return;
+					container.innerHTML = `
+						<div class="col-12 text-center py-5">
+							<div class="alert alert-danger">
+								<i class="fa fa-exclamation-triangle"></i>
+								Erro ao carregar ${context}
+								${error.message ? `<br><small>${error.message}</small>` : ""}
+							</div>
+						</div>`;
+				}
+			};
+		})();
 	</script>
 </body>
 
