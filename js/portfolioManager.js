@@ -2,7 +2,7 @@ import { db } from "/components/firebase-config.js";
 import {
   collection,
   getDocs,
-} from "https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js";
+} from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore-compat.js";
 
 const PORTFOLIO_CONFIG = {
   selectors: {
