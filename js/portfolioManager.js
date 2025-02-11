@@ -134,7 +134,7 @@ window.portfolioManager = (function () {
                       src="${project.imagem}" 
                       alt="${project.titulo}"
                       loading="lazy"
-                      style="height: 250px; object-fit: cover;"
+                      style="height: 250px; object-fit: contain; background-color: #e5e5e5;"
                       onerror="this.style.display='none'">
                     <div class="overlay"></div>
                     <a href="${project.imagem}" class="img-gal">
