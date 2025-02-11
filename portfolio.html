@@ -2,13 +2,12 @@
 <html lang="pt-br">
 
 <head>
-	<!-- Meta tags obrigatórias -->
+	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="img/favicon.png" type="image/png">
 	<title>Portfólio</title>
-
-	<!-- CSS de terceiros -->
+	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="vendors/linericon/style.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
@@ -16,218 +15,136 @@
 	<link rel="stylesheet" href="css/magnific-popup.css">
 	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
 
-	<!-- Estilos customizados -->
+	<!-- Estilos Customizados -->
 	<style>
-		/* ==================== VARIÁVEIS DE DESIGN ==================== */
-		:root {
-			--cor-primaria: #2A2A2A;
-			--cor-destaque: #6C63FF;
-			--sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.1);
-			--transicao-padrao: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-		}
-
-		/* ==================== ESTRUTURA PRINCIPAL ==================== */
 		.portfolio_box {
-			background: #FFFFFF;
-			border-radius: 18px;
-			box-shadow: var(--sombra-suave);
-			transition: var(--transicao-padrao);
+			background: #fff;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
 			overflow: hidden;
-			margin-bottom: 2rem;
-			position: relative;
+			margin-bottom: 30px;
 		}
 
 		.portfolio_box:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 12px 24px rgba(108, 99, 255, 0.15);
+			transform: translateY(-5px);
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 		}
 
-		/* ==================== SEÇÃO DE IMAGENS ==================== */
 		.single_portfolio {
 			position: relative;
 			overflow: hidden;
-			height: 280px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
 		}
 
 		.single_portfolio img {
-			max-width: 85%;
-			max-height: 220px;
-			object-fit: contain;
-			transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-			filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+			width: 100%;
+			height: 250px;
+			object-fit: cover;
+			transition: transform 0.3s ease;
 		}
 
 		.single_portfolio:hover img {
-			transform: scale(1.08) rotateZ(1deg);
+			transform: scale(1.05);
 		}
 
-		/* ==================== OVERLAY INTERATIVO ==================== */
 		.overlay {
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: linear-gradient(180deg, rgba(42, 42, 42, 0) 0%, rgba(42, 42, 42, 0.85) 100%);
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
 			opacity: 0;
-			transition: var(--transicao-padrao);
+			transition: opacity 0.3s ease;
 		}
 
-		.portfolio_box:hover .overlay {
+		.single_portfolio:hover .overlay {
 			opacity: 1;
 		}
 
-		/* ==================== EFEITO DE FLUTUAÇÃO ==================== */
 		.img-gal {
 			position: absolute;
-			bottom: -50px;
+			bottom: 20px;
 			left: 50%;
 			transform: translateX(-50%);
-			color: white;
-			transition: var(--transicao-padrao);
-			display: flex;
-			align-items: center;
-			padding: 12px 24px;
-			background: rgba(255, 255, 255, 0.15);
-			border-radius: 30px;
-			backdrop-filter: blur(8px);
+			color: #fff;
+			opacity: 0;
+			transition: all 0.3s ease;
 		}
 
-		.portfolio_box:hover .img-gal {
-			bottom: 30px;
+		.single_portfolio:hover .img-gal {
 			opacity: 1;
+			bottom: 30px;
 		}
 
-		/* ==================== INFORMAÇÕES DO PROJETO ==================== */
 		.short_info {
-			padding: 1.5rem;
-			background: #FFFFFF;
-			position: relative;
-			z-index: 2;
+			padding: 25px;
 		}
 
 		.short_info h4 {
-			color: var(--cor-primaria);
-			font-size: 1.3rem;
-			margin-bottom: 0.8rem;
-			font-weight: 700;
-			letter-spacing: -0.5px;
+			color: #2c2c2c;
+			font-size: 1.4rem;
+			margin-bottom: 15px;
+			font-weight: 600;
 		}
 
 		.short_info p {
-			color: #6C757D;
+			color: #666;
 			font-size: 0.95rem;
-			line-height: 1.7;
-			margin-bottom: 1.2rem;
+			line-height: 1.6;
+			margin-bottom: 15px;
 		}
 
-		/* ==================== BOTÕES INTERATIVOS ==================== */
 		.btn-link {
-			display: inline-flex;
-			align-items: center;
-			padding: 8px 16px;
-			border-radius: 8px;
-			background: rgba(108, 99, 255, 0.1);
-			color: var(--cor-destaque) !important;
-			transition: var(--transicao-padrao);
-			text-decoration: none !important;
-			margin: 4px 8px 4px 0;
+			color: #2c2c2c;
+			text-decoration: none;
+			font-weight: 500;
+			position: relative;
+			padding: 5px 0;
+			transition: color 0.3s ease;
 		}
 
 		.btn-link:hover {
-			background: var(--cor-destaque);
-			color: white !important;
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(108, 99, 255, 0.25);
+			color: #007bff;
 		}
 
-		/* ==================== FILTROS MODERNOS ==================== */
+		.btn-link::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 0;
+			height: 2px;
+			background: #007bff;
+			transition: width 0.3s ease;
+		}
+
+		.btn-link:hover::after {
+			width: 100%;
+		}
+
+		/* Filtros */
 		.portfolio-filter li {
-			padding: 10px 28px;
-			border-radius: 12px;
-			margin: 0 8px;
-			transition: var(--transicao-padrao);
-			background: rgba(108, 99, 255, 0.08);
-			color: #6C757D;
-			border: 2px solid transparent;
-			font-weight: 500;
+			cursor: pointer;
+			padding: 8px 20px;
+			border-radius: 25px;
+			margin: 0 5px;
+			transition: all 0.3s ease;
+			background: #f8f9fa;
+			color: #666;
 		}
 
 		.portfolio-filter li.active,
 		.portfolio-filter li:hover {
-			background: var(--cor-destaque);
-			color: white !important;
-			border-color: rgba(255, 255, 255, 0.15);
-			transform: translateY(-2px);
-		}
-
-		/* ==================== CERTIFICADOS ==================== */
-		.certificate-image-container {
-			height: 220px;
-			padding: 1.5rem;
-			background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
-			transition: var(--transicao-padrao);
-		}
-
-		.card {
-			border: none !important;
-			border-radius: 18px !important;
-			transition: var(--transicao-padrao);
-			cursor: pointer;
-		}
-
-		.card:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 12px 24px rgba(108, 99, 255, 0.1);
-		}
-
-		.card-img-top {
-			max-height: 180px;
-			object-fit: contain;
-			filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-		}
-
-		/* ==================== ANIMAÇÕES ==================== */
-		@keyframes float {
-
-			0%,
-			100% {
-				transform: translateY(0);
-			}
-
-			50% {
-				transform: translateY(-10px);
-			}
-		}
-
-		.img-gal .icon {
-			animation: float 2.5s ease-in-out infinite;
-		}
-
-		/* ==================== RESPONSIVIDADE ==================== */
-		@media (max-width: 768px) {
-			.portfolio_box {
-				margin-bottom: 1.5rem;
-			}
-
-			.single_portfolio {
-				height: 220px;
-			}
-
-			.btn-link {
-				width: 100%;
-				justify-content: center;
-			}
+			background: #007bff;
+			color: #fff;
 		}
 	</style>
 </head>
 
 <body>
-	<!-- Seção principal do portfólio -->
+	<!-- Seção de Portfólio -->
+	<!-- Seção de Projetos -->
 	<section class="portfolio_area" id="portfolio">
 		<div class="container">
 			<div class="row">
@@ -237,8 +154,6 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- Filtros -->
 			<div class="filters portfolio-filter">
 				<ul class="d-flex justify-content-center">
 					<li class="active" data-filter="*">todos</li>
@@ -246,15 +161,13 @@
 					<li data-filter=".latest"> últimos</li>
 				</ul>
 			</div>
-
-			<!-- Container de projetos -->
 			<div class="filters-content">
 				<div class="row portfolio-grid justify-content-center" id="projetos-container"></div>
 			</div>
 		</div>
 	</section>
 
-	<!-- Seção de certificações -->
+	<!-- Seção de Certificações -->
 	<section class="certificates_area section_gap">
 		<div class="container">
 			<h2 class="mb-5">Minhas Certificações</h2>
@@ -267,6 +180,14 @@
 	<script src="js/popper.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="vendors/isotope/isotope-min.js"></script>
+	<!-- Carrega o script do gerenciador de portfólio -->
+	<script src="js/portfolioManager.js"></script>
+	<!-- Adicione um script de inicialização no final -->
+	<script>
+		if (window.portfolioManager) {
+			window.portfolioManager.init();
+		}
+	</script>
 </body>
 
 </html>

@@ -195,6 +195,8 @@
 	<script src="js/popper.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="vendors/isotope/isotope-min.js"></script>
+	<!-- Carrega o script do gerenciador de portfólio -->
+	<script src="js/portfolioManager.js"></script>
 	<!-- Adicione um script de inicialização no final -->
 	<script>
 		if (window.portfolioManager) {
@@ -223,7 +225,7 @@
 					// Carrega scripts comuns
 					$('#scripts').load('./components/scripts.html', () => {
 
-						// Inicializa gerenciador de portfólio-NAV
+						// Inicializa gerenciador de portfólio
 						$.getScript("js/portfolioManager.js")
 							.done(() => {
 								window.portfolioManager.init();
