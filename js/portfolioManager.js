@@ -3,16 +3,18 @@
  *          GERENCIADOR DE PORTFÓLIO
  * =============================================
  *
- * Responsável por:
- * - Carregar dados de projetos e certificados
- * - Renderizar conteúdo dinâmico
- * - Gerenciar filtros
+ * Responsável pelo carregamento dinâmico e
+ * renderização de projetos e certificados
  *
- * Última atualização: [DD/MM/AAAA]
+ * Funcionalidades principais:
+ * 1. Carregamento assíncrono de dados
+ * 2. Renderização de cards responsivos
+ * 3. Sistema de filtragem Isotope
+ * 4. Tratamento de erros robusto
  */
 
 // Configurações globais
-const CONFIG = {
+const PORTFOLIO_CONFIG = {
   endpoints: {
     projetos: "json/projetos/desenvolvimento.json",
     certificados: "json/certificados/certificados.json",
@@ -23,196 +25,239 @@ const CONFIG = {
     isotopeGrid: ".portfolio-grid",
     filterButtons: ".portfolio-filter li",
   },
+  classes: {
+    projectItem: "col-lg-4 col-md-6 all",
+    certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4",
+  },
   styles: {
     cardImageHeight: "200px",
+    defaultCategory: "all",
   },
 };
 
-// Interface principal
-window.portfolioManager = {
-  /**
-   * Inicializa o portfólio
-   */
-  init: function () {
-    this._loadProjects()
-      .then(() => this._initFilters())
-      .catch(this._handleError.bind(this, "projetos"));
-
-    this._loadCertificates().catch(
-      this._handleError.bind(this, "certificados")
-    );
-  },
-
-  /**
-   * Carrega e renderiza projetos
-   */
-  _loadProjects: async function () {
+// Interface principal do portfólio
+window.portfolioManager = (function () {
+  // Métodos privados
+  const _fetchData = async (endpoint) => {
     try {
-      const data = await this._fetchData("projetos");
-      this._renderProjects(data.projetos);
-    } catch (error) {
-      throw new Error(`Falha ao carregar projetos: ${error.message}`);
-    }
-  },
-
-  /**
-   * Carrega e renderiza certificados
-   */
-  _loadCertificates: async function () {
-    try {
-      const data = await this._fetchData("certificados");
-      this._renderCertificates(data.certificados);
-    } catch (error) {
-      throw new Error(`Falha ao carregar certificados: ${error.message}`);
-    }
-  },
-
-  /**
-   * Busca dados na API
-   */
-  _fetchData: async function (type) {
-    try {
-      const response = await fetch(CONFIG.endpoints[type]);
+      const response = await fetch(endpoint);
 
       if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
+        throw new Error(
+          `Erro HTTP: ${response.status} - ${response.statusText}`
+        );
       }
 
-      const data = await response.json();
-
-      // Valida estrutura dos dados
-      if (!data[type] || !Array.isArray(data[type])) {
-        throw new Error(`Estrutura de dados inválida para ${type}`);
-      }
-
-      return data;
+      return await response.json();
     } catch (error) {
-      console.error(`Erro ao buscar ${type}:`, error);
+      console.error(`Falha no fetch: ${endpoint}`, error);
       throw error;
     }
-  },
+  };
 
-  /**
-   * Renderiza projetos na tela
-   */
-  _renderProjects: function (projects) {
-    const container = document.querySelector(CONFIG.selectors.projetos);
-
-    if (!container) {
-      throw new Error("Container de projetos não encontrado");
+  const _validateDataStructure = (data, expectedKey) => {
+    if (!data[expectedKey] || !Array.isArray(data[expectedKey])) {
+      throw new Error(
+        `Estrutura inválida: Chave '${expectedKey}' não encontrada ou não é array`
+      );
     }
+    return data[expectedKey];
+  };
 
-    container.innerHTML = projects
-      .map(
-        (project) => `
-          <div class="col-lg-4 col-md-6 all ${project.categoria}">
-              <div class="portfolio_box">
-                  <div class="single_portfolio">
-                      <img class="img-fluid w-100" 
-                          src="${project.imagem}" 
-                          alt="${project.titulo}"
-                          loading="lazy">
-                      <div class="overlay"></div>
-                      <a href="${project.imagem}" class="img-gal">
-                          <div class="icon"><span class="lnr lnr-cross"></span></div>
-                      </a>
+  // Interface pública
+  return {
+    /**
+     * Inicializa o portfólio
+     */
+    init: function () {
+      this.loadProjects()
+        .then(() => this.initFilters())
+        .catch((error) => this.handleError("projetos", error));
+
+      this.loadCertificates().catch((error) =>
+        this.handleError("certificados", error)
+      );
+    },
+
+    /**
+     * Carrega e renderiza projetos
+     */
+    loadProjects: async function () {
+      try {
+        const rawData = await _fetchData(PORTFOLIO_CONFIG.endpoints.projetos);
+        const projects = _validateDataStructure(rawData, "projetos");
+        this.renderProjects(projects);
+      } catch (error) {
+        throw new Error(`Falha no carregamento de projetos: ${error.message}`);
+      }
+    },
+
+    /**
+     * Carrega e renderiza certificados
+     */
+    loadCertificates: async function () {
+      try {
+        const rawData = await _fetchData(
+          PORTFOLIO_CONFIG.endpoints.certificados
+        );
+        const certificates = _validateDataStructure(rawData, "certificados");
+        this.renderCertificates(certificates);
+      } catch (error) {
+        throw new Error(
+          `Falha no carregamento de certificados: ${error.message}`
+        );
+      }
+    },
+
+    /**
+     * Renderiza projetos no DOM
+     */
+    renderProjects: function (projects) {
+      const container = document.querySelector(
+        PORTFOLIO_CONFIG.selectors.projetos
+      );
+
+      if (!container) {
+        throw new Error("Container de projetos não encontrado");
+      }
+
+      try {
+        container.innerHTML = projects
+          .map(
+            (project) => `
+                  <div class="${PORTFOLIO_CONFIG.classes.projectItem} ${
+              project.categoria || PORTFOLIO_CONFIG.styles.defaultCategory
+            }">
+                      <div class="portfolio_box">
+                          <div class="single_portfolio">
+                              <img class="img-fluid w-100" 
+                                  src="${project.imagem}" 
+                                  alt="${project.titulo}"
+                                  loading="lazy"
+                                  onerror="this.style.display='none'">
+                              <div class="overlay"></div>
+                              <a href="${project.imagem}" class="img-gal">
+                                  <div class="icon"><span class="lnr lnr-cross"></span></div>
+                              </a>
+                          </div>
+                          <div class="short_info">
+                              <h4>${project.titulo}</h4>
+                              <p>${project.descricao}</p>
+                              ${(project.links || [])
+                                .map(
+                                  (link) => `
+                                  <p>
+                                      <a href="${link.url}" 
+                                          target="_blank" 
+                                          rel="noopener noreferrer"
+                                          class="btn-link">
+                                          ${link.texto}
+                                      </a>
+                                  </p>
+                              `
+                                )
+                                .join("")}
+                          </div>
+                      </div>
                   </div>
-                  <div class="short_info">
-                      <h4>${project.titulo}</h4>
-                      <p>${project.descricao}</p>
-                      ${project.links
-                        ?.map(
-                          (link) => `
-                          <p><a href="${link.url}" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              class="project-link">
-                              ${link.texto}
-                          </a></p>
-                      `
-                        )
-                        .join("")}
+              `
+          )
+          .join("");
+      } catch (error) {
+        throw new Error(`Falha na renderização: ${error.message}`);
+      }
+    },
+
+    /**
+     * Renderiza certificados no DOM
+     */
+    renderCertificates: function (certificates) {
+      const container = document.querySelector(
+        PORTFOLIO_CONFIG.selectors.certificados
+      );
+
+      if (!container) {
+        throw new Error("Container de certificados não encontrado");
+      }
+
+      try {
+        container.innerHTML = certificates
+          .map(
+            (cert) => `
+                  <div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
+                      <div class="card h-100 shadow-sm">
+                          <img src="${cert.imagem}" 
+                              class="card-img-top" 
+                              alt="${cert.titulo}"
+                              loading="lazy"
+                              style="height: ${PORTFOLIO_CONFIG.styles.cardImageHeight}; object-fit: cover;"
+                              onerror="this.style.display='none'">
+                          <div class="card-body">
+                              <h5 class="card-title text-center">${cert.titulo}</h5>
+                          </div>
+                      </div>
                   </div>
-              </div>
-          </div>
-      `
-      )
-      .join("");
-  },
+              `
+          )
+          .join("");
+      } catch (error) {
+        throw new Error(`Falha na renderização: ${error.message}`);
+      }
+    },
 
-  /**
-   * Renderiza certificados na tela
-   */
-  _renderCertificates: function (certificates) {
-    const container = document.querySelector(CONFIG.selectors.certificados);
+    /**
+     * Inicializa o sistema de filtros
+     */
+    initFilters: function () {
+      const gridElement = document.querySelector(
+        PORTFOLIO_CONFIG.selectors.isotopeGrid
+      );
 
-    if (!container) {
-      throw new Error("Container de certificados não encontrado");
-    }
+      if (!gridElement) {
+        console.warn("Elemento grid não encontrado para filtros");
+        return;
+      }
 
-    container.innerHTML = certificates
-      .map(
-        (cert) => `
-          <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-              <div class="card h-100 shadow-sm">
-                  <img src="${cert.imagem}" 
-                      class="card-img-top" 
-                      alt="${cert.titulo}"
-                      loading="lazy"
-                      style="height: ${CONFIG.styles.cardImageHeight}; object-fit: cover;">
-                  <div class="card-body">
-                      <h5 class="card-title text-center">${cert.titulo}</h5>
-                  </div>
-              </div>
-          </div>
-      `
-      )
-      .join("");
-  },
+      const isotopeGrid = $(gridElement).isotope({
+        itemSelector: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
+        percentPosition: true,
+        masonry: {
+          columnWidth: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
+        },
+      });
 
-  /**
-   * Inicializa filtros Isotope
-   */
-  _initFilters: function () {
-    const grid = document.querySelector(CONFIG.selectors.isotopeGrid);
+      $(PORTFOLIO_CONFIG.selectors.filterButtons).on("click", function () {
+        $(PORTFOLIO_CONFIG.selectors.filterButtons).removeClass("active");
+        $(this).addClass("active");
+        const filterValue = $(this).attr("data-filter") || "*";
+        isotopeGrid.isotope({ filter: filterValue });
+      });
+    },
 
-    if (!grid) {
-      console.warn("Elemento grid não encontrado para inicializar filtros");
-      return;
-    }
+    /**
+     * Manipulador global de erros
+     */
+    handleError: function (context, error) {
+      console.error(`[${context.toUpperCase()}]`, error);
 
-    const $grid = $(grid).isotope({
-      itemSelector: ".all",
-      percentPosition: true,
-      masonry: {
-        columnWidth: ".all",
-      },
-    });
+      const container = document.querySelector(
+        PORTFOLIO_CONFIG.selectors[context]
+      );
+      if (!container) return;
 
-    $(CONFIG.selectors.filterButtons).click(function () {
-      $(CONFIG.selectors.filterButtons).removeClass("active");
-      $(this).addClass("active");
-      const filterValue = $(this).attr("data-filter");
-      $grid.isotope({ filter: filterValue });
-    });
-  },
-
-  /**
-   * Manipulador de erros global
-   */
-  _handleError: function (context, error) {
-    console.error(`Erro no contexto ${context}:`, error);
-    const container = document.querySelector(CONFIG.selectors[context]);
-
-    if (container) {
       container.innerHTML = `
               <div class="col-12 text-center py-5">
                   <div class="alert alert-danger">
-                      Erro ao carregar ${context}<br>
-                      <small>${error.message}</small>
+                      <i class="fa fa-exclamation-triangle"></i>
+                      Erro ao carregar ${context}
+                      ${
+                        error.message
+                          ? `<br><small>${error.message}</small>`
+                          : ""
+                      }
                   </div>
               </div>
           `;
-    }
-  },
-};
+    },
+  };
+})();
