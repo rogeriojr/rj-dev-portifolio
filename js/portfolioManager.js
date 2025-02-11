@@ -10,100 +10,102 @@
 // 2. Renderização de cards responsivos
 // 3. Sistema de filtragem Isotope
 // 4. Tratamento de erros robusto
+window.portfolioManager = (() => {
+  // Configurações globais
+  const PORTFOLIO_MANAGER = (() => {
+    const CONFIG = {
+      endpoints: {
+        projetos: "json/projetos/desenvolvimento.json",
+        certificados: "json/certificados/certificados.json",
+      },
+      selectors: {
+        projetos: "#projetos-container",
+        certificados: "#certificados-container",
+        isotopeGrid: ".portfolio-grid",
+        filterButtons: ".portfolio-filter li",
+      },
+      classes: {
+        projectItem: "col-lg-4 col-md-6 all",
+        certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4",
+      },
+      settings: {
+        imageLoadDelay: 150,
+        animationDuration: 600,
+        hoverIntentDelay: 100,
+      },
+    };
 
-// Configurações globais
-const PORTFOLIO_MANAGER = (() => {
-  const CONFIG = {
-    endpoints: {
-      projetos: "json/projetos/desenvolvimento.json",
-      certificados: "json/certificados/certificados.json",
-    },
-    selectors: {
-      projetos: "#projetos-container",
-      certificados: "#certificados-container",
-      isotopeGrid: ".portfolio-grid",
-      filterButtons: ".portfolio-filter li",
-    },
-    classes: {
-      projectItem: "col-lg-4 col-md-6 all",
-      certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4",
-    },
-    settings: {
-      imageLoadDelay: 150,
-      animationDuration: 600,
-      hoverIntentDelay: 100,
-    },
-  };
+    // Métodos privados
+    const _fetchData = async (endpoint) => {
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+        return await response.json();
+      } catch (error) {
+        console.error(`Falha no fetch: ${endpoint}`, error);
+        throw error;
+      }
+    };
 
-  // Métodos privados
-  const _fetchData = async (endpoint) => {
-    try {
-      const response = await fetch(endpoint);
-      if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
-      return await response.json();
-    } catch (error) {
-      console.error(`Falha no fetch: ${endpoint}`, error);
-      throw error;
-    }
-  };
+    const _createElement = (html) => {
+      const template = document.createElement("template");
+      template.innerHTML = html.trim();
+      return template.content.firstChild;
+    };
 
-  const _createElement = (html) => {
-    const template = document.createElement("template");
-    template.innerHTML = html.trim();
-    return template.content.firstChild;
-  };
-
-  const _animateElement = (element, animationClass) => {
-    element.classList.add(animationClass);
-    setTimeout(
-      () => element.classList.remove(animationClass),
-      CONFIG.settings.animationDuration
-    );
-  };
-
-  // Interface pública
-  return {
-    init: function () {
-      this.loadProjects()
-        .then(() => this.initFilters())
-        .catch((error) => this.handleError("projetos", error));
-
-      this.loadCertificates().catch((error) =>
-        this.handleError("certificados", error)
+    const _animateElement = (element, animationClass) => {
+      element.classList.add(animationClass);
+      setTimeout(
+        () => element.classList.remove(animationClass),
+        CONFIG.settings.animationDuration
       );
+    };
 
-      this.initHoverEffects();
-    },
+    // Interface pública
+    return {
+      init: function () {
+        this.loadProjects()
+          .then(() => this.initFilters())
+          .catch((error) => this.handleError("projetos", error));
 
-    async loadProjects() {
-      try {
-        const data = await _fetchData(CONFIG.endpoints.projetos);
-        this.renderProjects(data.projetos);
-      } catch (error) {
-        throw new Error(`Falha no carregamento de projetos: ${error.message}`);
-      }
-    },
-
-    async loadCertificates() {
-      try {
-        const data = await _fetchData(CONFIG.endpoints.certificados);
-        this.renderCertificates(data.certificados);
-      } catch (error) {
-        throw new Error(
-          `Falha no carregamento de certificados: ${error.message}`
+        this.loadCertificates().catch((error) =>
+          this.handleError("certificados", error)
         );
-      }
-    },
 
-    renderProjects(projects) {
-      const container = document.querySelector(CONFIG.selectors.projetos);
-      container.innerHTML = "";
+        this.initHoverEffects();
+      },
 
-      projects.forEach((project) => {
-        const projectHTML = `
+      async loadProjects() {
+        try {
+          const data = await _fetchData(CONFIG.endpoints.projetos);
+          this.renderProjects(data.projetos);
+        } catch (error) {
+          throw new Error(
+            `Falha no carregamento de projetos: ${error.message}`
+          );
+        }
+      },
+
+      async loadCertificates() {
+        try {
+          const data = await _fetchData(CONFIG.endpoints.certificados);
+          this.renderCertificates(data.certificados);
+        } catch (error) {
+          throw new Error(
+            `Falha no carregamento de certificados: ${error.message}`
+          );
+        }
+      },
+
+      renderProjects(projects) {
+        const container = document.querySelector(CONFIG.selectors.projetos);
+        container.innerHTML = "";
+
+        projects.forEach((project) => {
+          const projectHTML = `
                   <div class="${CONFIG.classes.projectItem} ${
-          project.categoria || ""
-        }">
+            project.categoria || ""
+          }">
                       <div class="portfolio_box">
                           <div class="single_portfolio">
                               <img src="${project.imagem}" 
@@ -144,16 +146,16 @@ const PORTFOLIO_MANAGER = (() => {
                       </div>
                   </div>
               `;
-        container.appendChild(_createElement(projectHTML));
-      });
-    },
+          container.appendChild(_createElement(projectHTML));
+        });
+      },
 
-    renderCertificates(certificates) {
-      const container = document.querySelector(CONFIG.selectors.certificados);
-      container.innerHTML = "";
+      renderCertificates(certificates) {
+        const container = document.querySelector(CONFIG.selectors.certificados);
+        container.innerHTML = "";
 
-      certificates.forEach((cert) => {
-        const certHTML = `
+        certificates.forEach((cert) => {
+          const certHTML = `
                   <div class="${CONFIG.classes.certificateItem}">
                       <div class="card h-100" 
                            onmouseenter="_animateElement(this, 'animate__pulse')">
@@ -179,57 +181,59 @@ const PORTFOLIO_MANAGER = (() => {
                       </div>
                   </div>
               `;
-        container.appendChild(_createElement(certHTML));
-      });
-    },
+          container.appendChild(_createElement(certHTML));
+        });
+      },
 
-    initFilters() {
-      const grid = document.querySelector(CONFIG.selectors.isotopeGrid);
-      if (!grid || !window.Isotope) return;
+      initFilters() {
+        const grid = document.querySelector(CONFIG.selectors.isotopeGrid);
+        if (!grid || !window.Isotope) return;
 
-      const iso = new Isotope(grid, {
-        itemSelector: ".col-lg-4",
-        layoutMode: "masonry",
-        masonry: { columnWidth: ".col-lg-4" },
-        transitionDuration: "0.6s",
-      });
+        const iso = new Isotope(grid, {
+          itemSelector: ".col-lg-4",
+          layoutMode: "masonry",
+          masonry: { columnWidth: ".col-lg-4" },
+          transitionDuration: "0.6s",
+        });
 
-      document
-        .querySelectorAll(CONFIG.selectors.filterButtons)
-        .forEach((button) => {
-          button.addEventListener("click", () => {
-            document
-              .querySelector(`${CONFIG.selectors.filterButtons}.active`)
-              ?.classList.remove("active");
-            button.classList.add("active");
-            iso.arrange({ filter: button.dataset.filter });
+        document
+          .querySelectorAll(CONFIG.selectors.filterButtons)
+          .forEach((button) => {
+            button.addEventListener("click", () => {
+              document
+                .querySelector(`${CONFIG.selectors.filterButtons}.active`)
+                ?.classList.remove("active");
+              button.classList.add("active");
+              iso.arrange({ filter: button.dataset.filter });
+            });
           });
-        });
-    },
+      },
 
-    initHoverEffects() {
-      let hoverTimeout;
+      initHoverEffects() {
+        let hoverTimeout;
 
-      document.querySelectorAll(".portfolio_box, .card").forEach((element) => {
-        element.addEventListener("mouseenter", () => {
-          hoverTimeout = setTimeout(() => {
-            element.style.transform = "translateY(-8px)";
-          }, CONFIG.settings.hoverIntentDelay);
-        });
+        document
+          .querySelectorAll(".portfolio_box, .card")
+          .forEach((element) => {
+            element.addEventListener("mouseenter", () => {
+              hoverTimeout = setTimeout(() => {
+                element.style.transform = "translateY(-8px)";
+              }, CONFIG.settings.hoverIntentDelay);
+            });
 
-        element.addEventListener("mouseleave", () => {
-          clearTimeout(hoverTimeout);
-          element.style.transform = "translateY(0)";
-        });
-      });
-    },
+            element.addEventListener("mouseleave", () => {
+              clearTimeout(hoverTimeout);
+              element.style.transform = "translateY(0)";
+            });
+          });
+      },
 
-    handleError(context, error) {
-      console.error(`[${context.toUpperCase()}]`, error);
-      const container = document.querySelector(CONFIG.selectors[context]);
+      handleError(context, error) {
+        console.error(`[${context.toUpperCase()}]`, error);
+        const container = document.querySelector(CONFIG.selectors[context]);
 
-      if (container) {
-        container.innerHTML = `
+        if (container) {
+          container.innerHTML = `
                   <div class="col-12 text-center py-5">
                       <div class="alert alert-danger animate__animated animate__shakeX">
                           <i class="fa fa-exclamation-triangle"></i>
@@ -241,10 +245,11 @@ const PORTFOLIO_MANAGER = (() => {
                           }
                       </div>
                   </div>`;
-      }
-    },
-  };
-})();
+        }
+      },
+    };
+  })();
 
-// Inicialização
-document.addEventListener("DOMContentLoaded", () => PORTFOLIO_MANAGER.init());
+  // Inicialização
+  document.addEventListener("DOMContentLoaded", () => PORTFOLIO_MANAGER.init());
+})();
