@@ -111,6 +111,7 @@
 				<div class="row portfolio-grid justify-content-center" id="projetos-container">
 					<div class="col-12 loader-container">
 						<div class="loader"></div>
+						<div class="error-message" style="display:none; color:red"></div>
 					</div>
 				</div>
 			</div>
@@ -130,6 +131,7 @@
 			<div class="row" id="certificados-container">
 				<div class="col-12 loader-container">
 					<div class="loader"></div>
+					<div class="error-message" style="display:none; color:red"></div>
 				</div>
 			</div>
 		</div>
@@ -164,23 +166,30 @@
 			])
 				.then(() => {
 					// Carrega scripts comuns
-					$('#scripts').load('./components/scripts.html', () => {
-
-						// Inicializa gerenciador de portfólio
+					$('#scripts').load('./components/scripts.html').done(() => {
+						// Carrega o script APÓS scripts.html
 						$.getScript("js/portfolioManager.js")
 							.done(() => {
-								window.portfolioManager.init();
-								$('#projetos-container, #certificados-container').find('.loader-container').remove();
+								if (window.portfolioManager && typeof window.portfolioManager.init === 'function') {
+									window.portfolioManager.init();
+									// Remove loaders após inicialização
+									$('#projetos-container, #certificados-container').find('.loader-container').remove();
+								} else {
+									console.error("portfolioManager não inicializado corretamente");
+									// Tratamento de erro
+								}
 							})
-							.fail(() => {
-								console.error("Falha ao carregar portfolioManager");
+							.fail((jqxhr, settings, exception) => {
+								console.error("Falha ao carregar portfolioManager:", exception);
+								// Exibe mensagem de erro
 								$('#projetos-container, #certificados-container').html(
 									'<div class="col-12 text-center py-5">' +
-									'<div class="alert alert-danger">Erro ao carregar conteúdo</div>' +
+									'<div class="alert alert-danger">Erro ao carregar projetos</div>' +
 									'</div>'
 								);
+								$('.error-message').text('Falha ao carregar conteúdo. Tente recarregar a página.').show();
 							});
-					});
+					});;
 				})
 				.catch((error) => {
 					console.error("Erro crítico:", error);
