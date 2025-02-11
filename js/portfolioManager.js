@@ -12,40 +12,34 @@
 // 4. Tratamento de erros robusto
 
 // Configurações globais
-const PORTFOLIO_CONFIG = {
-  endpoints: {
-    projetos: "json/projetos/desenvolvimento.json",
-    certificados: "json/certificados/certificados.json",
-  },
-  selectors: {
-    projetos: "#projetos-container",
-    certificados: "#certificados-container",
-    isotopeGrid: ".portfolio-grid",
-    filterButtons: ".portfolio-filter li",
-  },
-  classes: {
-    projectItem: "col-lg-4 col-md-6 all",
-    certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4",
-  },
-  styles: {
-    cardImageHeight: "200px",
-    defaultCategory: "all",
-  },
-};
+const PORTFOLIO_MANAGER = (() => {
+  const CONFIG = {
+    endpoints: {
+      projetos: "json/projetos/desenvolvimento.json",
+      certificados: "json/certificados/certificados.json",
+    },
+    selectors: {
+      projetos: "#projetos-container",
+      certificados: "#certificados-container",
+      isotopeGrid: ".portfolio-grid",
+      filterButtons: ".portfolio-filter li",
+    },
+    classes: {
+      projectItem: "col-lg-4 col-md-6 all",
+      certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4",
+    },
+    settings: {
+      imageLoadDelay: 150,
+      animationDuration: 600,
+      hoverIntentDelay: 100,
+    },
+  };
 
-// Interface principal do portfólio
-window.portfolioManager = (function () {
   // Métodos privados
   const _fetchData = async (endpoint) => {
     try {
       const response = await fetch(endpoint);
-
-      if (!response.ok) {
-        throw new Error(
-          `Erro HTTP: ${response.status} - ${response.statusText}`
-        );
-      }
-
+      if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
       return await response.json();
     } catch (error) {
       console.error(`Falha no fetch: ${endpoint}`, error);
@@ -53,13 +47,18 @@ window.portfolioManager = (function () {
     }
   };
 
-  const _validateDataStructure = (data, expectedKey) => {
-    if (!data[expectedKey] || !Array.isArray(data[expectedKey])) {
-      throw new Error(
-        `Estrutura inválida: Chave '${expectedKey}' não encontrada ou não é array`
-      );
-    }
-    return data[expectedKey];
+  const _createElement = (html) => {
+    const template = document.createElement("template");
+    template.innerHTML = html.trim();
+    return template.content.firstChild;
+  };
+
+  const _animateElement = (element, animationClass) => {
+    element.classList.add(animationClass);
+    setTimeout(
+      () => element.classList.remove(animationClass),
+      CONFIG.settings.animationDuration
+    );
   };
 
   // Interface pública
@@ -72,29 +71,23 @@ window.portfolioManager = (function () {
       this.loadCertificates().catch((error) =>
         this.handleError("certificados", error)
       );
+
+      this.initHoverEffects();
     },
 
-    // Carrega e renderiza projetos
-
-    loadProjects: async function () {
+    async loadProjects() {
       try {
-        const rawData = await _fetchData(PORTFOLIO_CONFIG.endpoints.projetos);
-        const projects = _validateDataStructure(rawData, "projetos");
-        this.renderProjects(projects);
+        const data = await _fetchData(CONFIG.endpoints.projetos);
+        this.renderProjects(data.projetos);
       } catch (error) {
         throw new Error(`Falha no carregamento de projetos: ${error.message}`);
       }
     },
 
-    //  Carrega e renderiza certificados
-
-    loadCertificates: async function () {
+    async loadCertificates() {
       try {
-        const rawData = await _fetchData(
-          PORTFOLIO_CONFIG.endpoints.certificados
-        );
-        const certificates = _validateDataStructure(rawData, "certificados");
-        this.renderCertificates(certificates);
+        const data = await _fetchData(CONFIG.endpoints.certificados);
+        this.renderCertificates(data.certificados);
       } catch (error) {
         throw new Error(
           `Falha no carregamento de certificados: ${error.message}`
@@ -102,192 +95,156 @@ window.portfolioManager = (function () {
       }
     },
 
-    // Renderiza projetos no DOM
+    renderProjects(projects) {
+      const container = document.querySelector(CONFIG.selectors.projetos);
+      container.innerHTML = "";
 
-    renderProjects: function (projects) {
-      const container = document.querySelector(
-        PORTFOLIO_CONFIG.selectors.projetos
-      );
-
-      if (!container) {
-        throw new Error("Container de projetos não encontrado");
-      }
-
-      try {
-        container.innerHTML = projects
-          .map(
-            (project) => `
-              <div class="${PORTFOLIO_CONFIG.classes.projectItem} ${
-              project.categoria || PORTFOLIO_CONFIG.styles.defaultCategory
-            }">
-                <div class="portfolio_box">
-                  <div class="single_portfolio">
-                    <img class="img-fluid w-100" 
-                      src="${project.imagem}" 
-                      alt="${project.titulo}"
-                      loading="lazy"
-                      style="height: 250px; object-fit: cover;"
-                      onerror="this.style.display='none'">
-                    <div class="overlay"></div>
-                    <a href="${project.imagem}" class="img-gal">
-                      <div class="icon"><span class="lnr lnr-cross"></span></div>
-                    </a>
-                  </div>
-                  <div class="short_info">
-                    <h4>${project.titulo}</h4>
-                    <p class="text-muted">${project.descricao}</p>
-                    ${(project.links || [])
-                      .map(
-                        (link) => `
-                      <div class="link-container">
-                        <a href="${link.url}" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          class="btn-link">
-                          <i class="fa fa-external-link mr-2"></i>${link.texto}
-                        </a>
-                      </div>
-                    `
-                      )
-                      .join("")}
-                  </div>
-                </div>
-              </div>
-            `
-          )
-          .join("");
-      } catch (error) {
-        throw new Error(`Falha na renderização: ${error.message}`);
-      }
-    },
-
-    // Renderiza certificados no DOM
-
-    renderCertificates: function (certificates) {
-      const container = document.querySelector(
-        PORTFOLIO_CONFIG.selectors.certificados
-      );
-
-      if (!container) {
-        throw new Error("Container de certificados não encontrado");
-      }
-
-      try {
-        container.innerHTML = certificates
-          .map(
-            (cert) => `
-              <div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
-                <div class="card h-100 shadow-sm border-0">
-                  <img src="${cert.imagem}" 
-                    class="card-img-top" 
-                    alt="${cert.titulo}"
-                    loading="lazy"
-                    style="height: ${PORTFOLIO_CONFIG.styles.cardImageHeight}; object-fit: cover; border-radius: 10px 10px 0 0;"
-                    onerror="this.style.display='none'">
-                  <div class="card-body text-center">
-                    <h5 class="card-title font-weight-bold mb-0">${cert.titulo}</h5>
-                  </div>
-                </div>
-              </div>
-            `
-          )
-          .join("");
-      } catch (error) {
-        throw new Error(`Falha na renderização: ${error.message}`);
-      }
-    },
-
-    //  Renderiza certificados no DOM
-
-    renderCertificates: function (certificates) {
-      const container = document.querySelector(
-        PORTFOLIO_CONFIG.selectors.certificados
-      );
-
-      if (!container) {
-        throw new Error("Container de certificados não encontrado");
-      }
-
-      try {
-        container.innerHTML = certificates
-          .map(
-            (cert) => `
-                  <div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
-                      <div class="card h-100 shadow-sm">
-                          <img src="${cert.imagem}" 
-                              class="card-img-top" 
-                              alt="${cert.titulo}"
-                              loading="lazy"
-                              style="height: ${PORTFOLIO_CONFIG.styles.cardImageHeight}; object-fit: cover;"
-                              onerror="this.style.display='none'">
-                          <div class="card-body">
-                              <h5 class="card-title text-center">${cert.titulo}</h5>
+      projects.forEach((project) => {
+        const projectHTML = `
+                  <div class="${CONFIG.classes.projectItem} ${
+          project.categoria || ""
+        }">
+                      <div class="portfolio_box">
+                          <div class="single_portfolio">
+                              <img src="${project.imagem}" 
+                                   alt="${project.titulo}"
+                                   loading="lazy"
+                                   style="opacity:0; transition: opacity 0.6s ease"
+                                   onload="setTimeout(() => this.style.opacity = 1, ${
+                                     CONFIG.settings.imageLoadDelay
+                                   })"
+                                   onerror="this.style.display='none'">
+                              <div class="overlay"></div>
+                              <div class="img-gal">
+                                  <span class="icon lnr lnr-cross"></span>
+                                  <span>Ver Detalhes</span>
+                              </div>
+                          </div>
+                          <div class="short_info">
+                              <h4>${project.titulo}</h4>
+                              <p>${project.descricao}</p>
+                              <div class="d-flex flex-wrap">
+                                  ${(project.links || [])
+                                    .map(
+                                      (link) => `
+                                      <a href="${link.url}" 
+                                         target="_blank" 
+                                         rel="noopener"
+                                         class="btn-link"
+                                         onmouseenter="_animateElement(this, 'animate__tada')">
+                                         <i class="fa fa-${
+                                           link.icone || "external-link"
+                                         } mr-2"></i>${link.texto}
+                                      </a>
+                                  `
+                                    )
+                                    .join("")}
+                              </div>
                           </div>
                       </div>
                   </div>
-              `
-          )
-          .join("");
-      } catch (error) {
-        throw new Error(`Falha na renderização: ${error.message}`);
-      }
+              `;
+        container.appendChild(_createElement(projectHTML));
+      });
     },
 
-    //  Inicializa o sistema de filtros
+    renderCertificates(certificates) {
+      const container = document.querySelector(CONFIG.selectors.certificados);
+      container.innerHTML = "";
 
-    initFilters: function () {
-      const gridElement = document.querySelector(
-        PORTFOLIO_CONFIG.selectors.isotopeGrid
-      );
+      certificates.forEach((cert) => {
+        const certHTML = `
+                  <div class="${CONFIG.classes.certificateItem}">
+                      <div class="card h-100" 
+                           onmouseenter="_animateElement(this, 'animate__pulse')">
+                          <div class="certificate-image-container">
+                              <img src="${cert.imagem}" 
+                                   class="card-img-top" 
+                                   alt="${cert.titulo}"
+                                   loading="lazy"
+                                   style="opacity:0; transition: opacity 0.6s ease"
+                                   onload="setTimeout(() => this.style.opacity = 1, ${
+                                     CONFIG.settings.imageLoadDelay
+                                   })"
+                                   onerror="this.style.display='none'">
+                          </div>
+                          <div class="card-body text-center">
+                              <h5 class="card-title mb-0">${cert.titulo}</h5>
+                              ${
+                                cert.emissor
+                                  ? `<p class="text-muted mt-2 mb-0">${cert.emissor}</p>`
+                                  : ""
+                              }
+                          </div>
+                      </div>
+                  </div>
+              `;
+        container.appendChild(_createElement(certHTML));
+      });
+    },
 
-      if (!gridElement || !window.Isotope) {
-        console.warn("Isotope não carregado ou elemento grid não encontrado");
-        return;
-      }
+    initFilters() {
+      const grid = document.querySelector(CONFIG.selectors.isotopeGrid);
+      if (!grid || !window.Isotope) return;
 
-      // Garante que o DOM está pronto
-      $(document).ready(() => {
-        const isotopeGrid = new Isotope(gridElement, {
-          itemSelector: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
-          percentPosition: true,
-          masonry: {
-            columnWidth: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
-          },
+      const iso = new Isotope(grid, {
+        itemSelector: ".col-lg-4",
+        layoutMode: "masonry",
+        masonry: { columnWidth: ".col-lg-4" },
+        transitionDuration: "0.6s",
+      });
+
+      document
+        .querySelectorAll(CONFIG.selectors.filterButtons)
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            document
+              .querySelector(`${CONFIG.selectors.filterButtons}.active`)
+              ?.classList.remove("active");
+            button.classList.add("active");
+            iso.arrange({ filter: button.dataset.filter });
+          });
+        });
+    },
+
+    initHoverEffects() {
+      let hoverTimeout;
+
+      document.querySelectorAll(".portfolio_box, .card").forEach((element) => {
+        element.addEventListener("mouseenter", () => {
+          hoverTimeout = setTimeout(() => {
+            element.style.transform = "translateY(-8px)";
+          }, CONFIG.settings.hoverIntentDelay);
         });
 
-        $(PORTFOLIO_CONFIG.selectors.filterButtons).on("click", function () {
-          $(this).parent().find(".active").removeClass("active");
-          $(this).addClass("active");
-          isotopeGrid.arrange({
-            filter: $(this).attr("data-filter") || "*",
-          });
+        element.addEventListener("mouseleave", () => {
+          clearTimeout(hoverTimeout);
+          element.style.transform = "translateY(0)";
         });
       });
     },
 
-    // Manipulador global de erros
-
-    handleError: function (context, error) {
+    handleError(context, error) {
       console.error(`[${context.toUpperCase()}]`, error);
+      const container = document.querySelector(CONFIG.selectors[context]);
 
-      const container = document.querySelector(
-        PORTFOLIO_CONFIG.selectors[context]
-      );
-      if (!container) return;
-
-      container.innerHTML = `
-              <div class="col-12 text-center py-5">
-                  <div class="alert alert-danger">
-                      <i class="fa fa-exclamation-triangle"></i>
-                      Erro ao carregar ${context}
-                      ${
-                        error.message
-                          ? `<br><small>${error.message}</small>`
-                          : ""
-                      }
-                  </div>
-              </div>
-          `;
+      if (container) {
+        container.innerHTML = `
+                  <div class="col-12 text-center py-5">
+                      <div class="alert alert-danger animate__animated animate__shakeX">
+                          <i class="fa fa-exclamation-triangle"></i>
+                          Erro ao carregar ${context}
+                          ${
+                            error.message
+                              ? `<br><small>${error.message}</small>`
+                              : ""
+                          }
+                      </div>
+                  </div>`;
+      }
     },
   };
 })();
+
+// Inicialização
+document.addEventListener("DOMContentLoaded", () => PORTFOLIO_MANAGER.init());
