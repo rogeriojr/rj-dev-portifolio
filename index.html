@@ -1,272 +1,97 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
-	<!-- Meta tags obrigatórias -->
+	<!-- Metadados Base -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="img/favicon.png" type="image/png">
-	<title>Portfólio</title>
 
-	<!-- CSS de terceiros -->
+	<!-- Título -->
+	<title>Rogerio Portfólio</title>
+
+	<!-- CSS Principal -->
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="vendors/linericon/style.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
 	<link rel="stylesheet" href="css/magnific-popup.css">
 	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
+	<link rel="stylesheet" href="css/style.css">
 
-	<!-- Estilos customizados -->
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="isotope.pkgd.min.js"></script>
+
+	<!-- CSS para Loaders e Ajustes de Layout -->
 	<style>
-		/* ==================== VARIÁVEIS DE DESIGN ==================== */
-		:root {
-			--cor-primaria: #2A2A2A;
-			--cor-destaque: #6C63FF;
-			--cor-destaque-hover: #554FE1;
-			--sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.1);
-			--transicao-padrao: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-			--borda-radius: 16px;
+		/* Prevenir overflow horizontal */
+		html,
+		body {
+			max-width: 100vw;
+			overflow-x: hidden;
 		}
 
-		/* ==================== ESTRUTURA PRINCIPAL ==================== */
-		.portfolio_box {
-			background: #FFFFFF;
-			border-radius: var(--borda-radius);
-			box-shadow: var(--sombra-suave);
-			transition: var(--transicao-padrao);
-			overflow: hidden;
-			margin-bottom: 2rem;
-			position: relative;
-			border: 1px solid rgba(0, 0, 0, 0.05);
-		}
-
-		.portfolio_box:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 12px 24px rgba(108, 99, 255, 0.2);
-		}
-
-		/* ==================== SEÇÃO DE IMAGENS ==================== */
-		.single_portfolio {
-			position: relative;
-			overflow: hidden;
-			height: 300px;
+		/* Loaders */
+		.loader-container {
 			display: flex;
-			align-items: center;
 			justify-content: center;
-			background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
-			padding: 1.5rem;
+			padding: 50px 0;
 		}
 
-		.single_portfolio img {
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
-			transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-			filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-			position: relative;
-			z-index: 1;
+		.loader {
+			width: 40px;
+			height: 40px;
+			border: 4px solid #f3f3f3;
+			border-top: 4px solid #4458dc;
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
 		}
 
-		.single_portfolio:hover img {
-			transform: scale(1.05);
-		}
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
 
-		/* ==================== OVERLAY INTERATIVO ==================== */
-		.overlay {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(180deg, rgba(42, 42, 42, 0) 0%, rgba(42, 42, 42, 0.9) 100%);
-			opacity: 0;
-			transition: var(--transicao-padrao);
-			z-index: 2;
-		}
-
-		.portfolio_box:hover .overlay {
-			opacity: 1;
-		}
-
-		/* ==================== EFEITO DE FLUTUAÇÃO ==================== */
-		.img-gal {
-			position: absolute;
-			bottom: -50px;
-			left: 50%;
-			transform: translateX(-50%);
-			color: white;
-			transition: var(--transicao-padrao);
-			display: flex;
-			align-items: center;
-			padding: 12px 24px;
-			background: rgba(255, 255, 255, 0.2);
-			border-radius: 30px;
-			backdrop-filter: blur(8px);
-			border: 1px solid rgba(255, 255, 255, 0.1);
-			z-index: 3;
-		}
-
-		.img-gal .icon {
-			margin-right: 8px;
-		}
-
-		.portfolio_box:hover .img-gal {
-			bottom: 30px;
-			opacity: 1;
-		}
-
-		/* ==================== INFORMAÇÕES DO PROJETO ==================== */
-		.short_info {
-			padding: 1.5rem;
-			background: #FFFFFF;
-			position: relative;
-			z-index: 2;
-		}
-
-		.short_info h4 {
-			color: var(--cor-primaria);
-			font-size: 1.3rem;
-			margin-bottom: 0.8rem;
-			font-weight: 700;
-			letter-spacing: -0.5px;
-		}
-
-		.short_info p {
-			color: #6C757D;
-			font-size: 0.95rem;
-			line-height: 1.7;
-			margin-bottom: 1.2rem;
-			min-height: 60px;
-		}
-
-		/* ==================== BOTÕES INTERATIVOS ==================== */
-		.btn-link {
-			display: inline-flex;
-			align-items: center;
-			padding: 8px 16px;
-			border-radius: 8px;
-			background: rgba(108, 99, 255, 0.1);
-			color: var(--cor-destaque) !important;
-			transition: var(--transicao-padrao);
-			text-decoration: none !important;
-			margin: 4px 8px 4px 0;
-			border: 1px solid rgba(108, 99, 255, 0.2);
-		}
-
-		.btn-link:hover {
-			background: var(--cor-destaque);
-			color: white !important;
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(108, 99, 255, 0.25);
-			border-color: transparent;
-		}
-
-		/* ==================== FILTROS MODERNOS ==================== */
-		.portfolio-filter {
-			margin: 2rem 0;
-		}
-
-		.portfolio-filter li {
-			padding: 12px 32px;
-			border-radius: 12px;
-			margin: 0 8px;
-			transition: var(--transicao-padrao);
-			background: rgba(108, 99, 255, 0.08);
-			color: #6C757D;
-			border: 2px solid transparent;
-			font-weight: 500;
-			cursor: pointer;
-		}
-
-		.portfolio-filter li.active,
-		.portfolio-filter li:hover {
-			background: var(--cor-destaque);
-			color: white !important;
-			box-shadow: 0 4px 12px rgba(108, 99, 255, 0.25);
-			transform: translateY(-2px);
-		}
-
-		/* ==================== CERTIFICADOS ==================== */
-		.certificate-image-container {
-			height: 220px;
-			padding: 1.5rem;
-			background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
-			transition: var(--transicao-padrao);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.card {
-			border: none !important;
-			border-radius: var(--borda-radius) !important;
-			transition: var(--transicao-padrao);
-			cursor: pointer;
-			overflow: hidden;
-		}
-
-		.card:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 12px 24px rgba(108, 99, 255, 0.15) !important;
-		}
-
-		.card-img-top {
-			max-height: 180px;
-			object-fit: contain;
-			width: 80%;
-			margin: 0 auto;
-			filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-		}
-
-		/* ==================== ANIMAÇÕES ==================== */
-		@keyframes float {
-
-			0%,
 			100% {
-				transform: translateY(0);
-			}
-
-			50% {
-				transform: translateY(-10px);
+				transform: rotate(360deg);
 			}
 		}
 
-		.img-gal .icon {
-			animation: float 2.5s ease-in-out infinite;
-		}
-
-		/* ==================== RESPONSIVIDADE ==================== */
-		@media (max-width: 768px) {
-			.portfolio_box {
-				margin-bottom: 1.5rem;
-			}
-
-			.single_portfolio {
-				height: 240px;
-			}
-
-			.portfolio-filter li {
-				margin: 4px;
-				padding: 10px 20px;
-				font-size: 0.9rem;
-			}
-
-			.btn-link {
-				width: 100%;
-				justify-content: center;
-				margin: 4px 0;
-			}
-
-			.card-img-top {
-				width: 90%;
-			}
+		/* Ajustes Responsivos */
+		.container {
+			padding-left: 15px;
+			padding-right: 15px;
 		}
 	</style>
 </head>
 
 <body>
-	<!-- Seção principal do portfólio -->
-	<section class="portfolio_area section_gap" id="portfolio">
+	<!-- ========== [Área do Cabeçalho] ========== -->
+	<div id="header">
+		<div class="loader-container">
+			<div class="loader"></div>
+		</div>
+	</div>
+
+	<!-- ========== [Banner Principal] ========== -->
+	<div id="home-banner">
+		<div class="loader-container">
+			<div class="loader"></div>
+		</div>
+	</div>
+
+	<!-- ========== [Seção Sobre] ========== -->
+	<section class="about_area section_gap">
+		<div id="about">
+			<div class="loader-container">
+				<div class="loader"></div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ========== [Seção Portfólio] ========== -->
+	<section class="portfolio_area section_gap">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -275,245 +100,101 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- Filtros -->
 			<div class="filters portfolio-filter">
-				<ul class="d-flex flex-wrap justify-content-center">
+				<ul>
 					<li class="active" data-filter="*">todos</li>
 					<li data-filter=".popular">popular</li>
 					<li data-filter=".latest"> últimos</li>
 				</ul>
 			</div>
-
-			<!-- Container de projetos -->
 			<div class="filters-content">
-				<div class="row portfolio-grid justify-content-center" id="projetos-container"></div>
+				<div class="row portfolio-grid justify-content-center" id="projetos-container">
+					<div class="col-12 loader-container">
+						<div class="loader"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- Seção de certificações -->
+	<!-- ========== [Seção Certificações] ========== -->
 	<section class="certificates_area section_gap">
 		<div class="container">
-			<h2 class="mb-5">Minhas Certificações</h2>
-			<div class="row" id="certificados-container"></div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="main_title text-left">
+						<h2>Minhas Certificações</h2>
+					</div>
+				</div>
+			</div>
+			<div class="row" id="certificados-container">
+				<div class="col-12 loader-container">
+					<div class="loader"></div>
+				</div>
+			</div>
 		</div>
 	</section>
 
-	<!-- Scripts de terceiros -->
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/popper.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="vendors/isotope/isotope-min.js"></script>
+	<!-- ========== [Rodapé] ========== -->
+	<div id="footer">
+		<div class="loader-container">
+			<div class="loader"></div>
+		</div>
+	</div>
 
-	<!-- Gerenciador de Portfólio Atualizado -->
+	<!-- ========== [Scripts de Carregamento] ========== -->
 	<script>
-		/**
-		 * =============================================
-		 *          SISTEMA DE GERENCIAMENTO DE PORTFÓLIO
-		 * =============================================
-		 * @version 3.0 | UI/UX Enhanced
-		 * @description Sistema otimizado com melhorias de performance e experiência do usuário
-		 */
-
-		const PORTFOLIO_MANAGER = (() => {
-			const CONFIG = {
-				endpoints: {
-					projetos: "json/projetos/desenvolvimento.json",
-					certificados: "json/certificados/certificados.json"
-				},
-				selectors: {
-					projetos: "#projetos-container",
-					certificados: "#certificados-container",
-					isotopeGrid: ".portfolio-grid",
-					filterButtons: ".portfolio-filter li"
-				},
-				classes: {
-					projectItem: "col-lg-4 col-md-6 all",
-					certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4"
-				},
-				settings: {
-					imageLoadDelay: 150,
-					hoverIntentDelay: 100
-				}
+		$(document).ready(function () {
+			// Função para carregar componentes com feedback visual
+			const loadComponent = (selector, path) => {
+				return new Promise((resolve) => {
+					$(selector).load(path, () => {
+						$(selector).find('.loader-container').remove();
+						resolve();
+					});
+				});
 			};
 
-			// Métodos privados
-			const _fetchData = async (url) => {
-				try {
-					const response = await fetch(url);
-					if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
-					return await response.json();
-				} catch (error) {
-					console.error(`Falha ao carregar: ${url}`, error);
-					throw error;
-				}
-			};
+			// Sequência de carregamento principal
+			Promise.all([
+				loadComponent('#header', './components/header.html'),
+				loadComponent('#home-banner', './components/home-banner.html'),
+				loadComponent('#footer', './components/footer.html'),
+				loadComponent('#about', './components/about-home.html')
+			])
+				.then(() => {
+					// Carrega scripts comuns
+					$('#scripts').load('./components/scripts.html', () => {
 
-			const _handleImageLoad = (img) => {
-				setTimeout(() => img.style.opacity = 1, CONFIG.settings.imageLoadDelay);
-			};
-
-			const _createElement = (htmlString) => {
-				const template = document.createElement('template');
-				template.innerHTML = htmlString.trim();
-				return template.content.firstChild;
-			};
-
-			// Interface pública
-			return {
-				init: function () {
-					this._loadProjects();
-					this._loadCertificates();
-					this._initFilters();
-					this._initHoverEffects();
-				},
-
-				_loadProjects: async function () {
-					try {
-						const data = await _fetchData(CONFIG.endpoints.projetos);
-						this._renderProjects(data.projetos);
-					} catch (error) {
-						this._showError(CONFIG.selectors.projetos, error);
-					}
-				},
-
-				_loadCertificates: async function () {
-					try {
-						const data = await _fetchData(CONFIG.endpoints.certificados);
-						this._renderCertificates(data.certificados);
-					} catch (error) {
-						this._showError(CONFIG.selectors.certificados, error);
-					}
-				},
-
-				_renderProjects: function (projects) {
-					const container = document.querySelector(CONFIG.selectors.projetos);
-					container.innerHTML = '';
-
-					projects.forEach(project => {
-						const projectHTML = `
-                            <div class="${CONFIG.classes.projectItem} ${project.categoria || ''}">
-                                <div class="portfolio_box">
-                                    <div class="single_portfolio">
-                                        <img src="${project.imagem}" 
-                                             alt="${project.titulo}"
-                                             loading="lazy"
-                                             style="opacity:0; transition: opacity 0.6s ease"
-                                             onload="_handleImageLoad(this)"
-                                             onerror="this.style.display='none'">
-                                        <div class="overlay"></div>
-                                        <div class="img-gal">
-                                            <span class="icon lnr lnr-cross"></span>
-                                            <span>Ver Detalhes</span>
-                                        </div>
-                                    </div>
-                                    <div class="short_info">
-                                        <h4>${project.titulo}</h4>
-                                        <p>${project.descricao}</p>
-                                        <div class="d-flex flex-wrap">
-                                            ${project.links?.map(link => `
-                                                <a href="${link.url}" 
-                                                   target="_blank" 
-                                                   rel="noopener"
-                                                   class="btn-link">
-                                                   <i class="fa fa-${link.icone || 'external-link'} mr-2"></i>${link.texto}
-                                                </a>
-                                            `).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-						container.appendChild(_createElement(projectHTML));
+						// Inicializa gerenciador de portfólio
+						$.getScript("js/portfolioManager.js")
+							.done(() => {
+								window.portfolioManager.init();
+								$('#projetos-container, #certificados-container').find('.loader-container').remove();
+							})
+							.fail(() => {
+								console.error("Falha ao carregar portfolioManager");
+								$('#projetos-container, #certificados-container').html(
+									'<div class="col-12 text-center py-5">' +
+									'<div class="alert alert-danger">Erro ao carregar conteúdo</div>' +
+									'</div>'
+								);
+							});
 					});
-				},
-
-				_renderCertificates: function (certificates) {
-					const container = document.querySelector(CONFIG.selectors.certificados);
-					container.innerHTML = '';
-
-					certificates.forEach(cert => {
-						const certHTML = `
-                            <div class="${CONFIG.classes.certificateItem}">
-                                <div class="card h-100">
-                                    <div class="certificate-image-container">
-                                        <img src="${cert.imagem}" 
-                                             class="card-img-top" 
-                                             alt="${cert.titulo}"
-                                             loading="lazy"
-                                             style="opacity:0; transition: opacity 0.6s ease"
-                                             onload="_handleImageLoad(this)"
-                                             onerror="this.style.display='none'">
-                                    </div>
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title mb-0">${cert.titulo}</h5>
-                                        ${cert.emissor ? `<p class="text-muted mt-2 mb-0">${cert.emissor}</p>` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-						container.appendChild(_createElement(certHTML));
-					});
-				},
-
-				_initFilters: function () {
-					const grid = document.querySelector(CONFIG.selectors.isotopeGrid);
-					if (!grid || !window.Isotope) return;
-
-					const iso = new Isotope(grid, {
-						itemSelector: '.col-lg-4',
-						layoutMode: 'masonry',
-						masonry: { columnWidth: '.col-lg-4' },
-						transitionDuration: '0.6s'
-					});
-
-					document.querySelectorAll(CONFIG.selectors.filterButtons).forEach(button => {
-						button.addEventListener('click', () => {
-							document.querySelector(`${CONFIG.selectors.filterButtons}.active`)
-								?.classList.remove('active');
-							button.classList.add('active');
-							iso.arrange({ filter: button.dataset.filter });
-						});
-					});
-				},
-
-				_initHoverEffects: function () {
-					let hoverTimeout;
-
-					document.querySelectorAll('.portfolio_box, .card').forEach(element => {
-						element.addEventListener('mouseenter', () => {
-							hoverTimeout = setTimeout(() => {
-								element.style.transform = 'translateY(-8px)';
-							}, CONFIG.settings.hoverIntentDelay);
-						});
-
-						element.addEventListener('mouseleave', () => {
-							clearTimeout(hoverTimeout);
-							element.style.transform = 'translateY(0)';
-						});
-					});
-				},
-
-				_showError: function (selector, error) {
-					const container = document.querySelector(selector);
-					if (!container) return;
-
-					container.innerHTML = `
-                        <div class="col-12 text-center py-5">
-                            <div class="alert alert-danger">
-                                <i class="fa fa-exclamation-triangle"></i>
-                                Erro ao carregar conteúdo
-                                <div class="small mt-2">${error.message}</div>
-                            </div>
-                        </div>`;
-				}
-			};
-		})();
-
-		// Inicialização do sistema
-		document.addEventListener('DOMContentLoaded', () => PORTFOLIO_MANAGER.init());
+				})
+				.catch((error) => {
+					console.error("Erro crítico:", error);
+					$('.loader-container').replaceWith(
+						'<div class="col-12 text-center py-5">' +
+						'<div class="alert alert-danger">Falha ao carregar a página</div>' +
+						'</div>'
+					);
+				});
+		});
 	</script>
+
+	<!-- Área para scripts comuns -->
+	<div id="scripts"></div>
 </body>
 
 </html>
