@@ -88,12 +88,12 @@ export const portfolioManager = (function () {
                   <div class="portfolio_box" 
                        style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center;">
                       <div class="single_portfolio" 
-                           style="background: #8a63d2; border-radius: 8px; padding: 10px;">
+                           style="background: #cec0f5; border-radius: 8px; padding: 10px;">
                           <img src="${project.imagem}" alt="${project.titulo}" 
                                style="height: 250px; width: 100%; object-fit: contain; border-radius: 8px;">
                       </div>
                       <div class="short_info" style="padding: 10px;">
-                          <h4 style="color: #6f42c1; font-size: 20px; margin-bottom: 5px;">${project.titulo}</h4>
+                          <h4 style="color: #cec0f5; font-size: 20px; margin-bottom: 5px;">${project.titulo}</h4>
                           <p style="color: #333; font-size: 14px;">${project.descricao}</p>
                           <a href="${project.link}" target="_blank" 
                              style="display: inline-block; margin-top: 8px; padding: 8px 15px; background: #6f42c1; color: white; border-radius: 6px; text-decoration: none; transition: 0.3s;">
@@ -122,7 +122,7 @@ export const portfolioManager = (function () {
               <div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
                   <div class="card h-100" 
                        style="background: white; border-radius: 12px; padding: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center;">
-                      <div style="background: #8a63d2; border-radius: 8px; padding: 10px;">
+                      <div style="background: #cec0f5; border-radius: 8px; padding: 10px;">
                           <img src="${cert.imagem}" class="card-img-top" 
                                alt="${cert.titulo}" style="height: 200px; width: 100%; object-fit: contain; border-radius: 8px;">
                       </div>
