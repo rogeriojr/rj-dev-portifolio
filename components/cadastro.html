@@ -25,6 +25,8 @@
 
 <script type="module">
   import { db } from '/components/firebase-config.js';
+  import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"; // Importação correta
+
 
   document.getElementById('formProjeto').addEventListener('submit', async (e) => {
     e.preventDefault();

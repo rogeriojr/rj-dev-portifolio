@@ -1,14 +1,12 @@
-<!-- Carregando jQuery antes dos scripts que dependem dele -->
+<!-- jQuery primeiro -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Firebase compat -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"></script>
-
-<!-- Configuração do Firebase -->
 <script type="module" src="/components/firebase-config.js"></script>
 
-<!-- Seus scripts normais -->
+<!-- Outras dependências -->
 <script src="js/popper.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/stellar.js"></script>
@@ -25,8 +23,5 @@
 <!-- Carregando o gerenciador de portfólio corretamente -->
 <script type="module">
   import { portfolioManager } from './js/portfolioManager.js';
-
-  $(document).ready(() => {
-    portfolioManager.init();
-  });
+  $(document).ready(() => portfolioManager.init());
 </script>

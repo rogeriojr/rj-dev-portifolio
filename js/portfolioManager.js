@@ -1,4 +1,9 @@
 import { db } from "/components/firebase-config.js";
+import {
+  collection,
+  getDocs,
+} from "https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js";
+
 const PORTFOLIO_CONFIG = {
   selectors: {
     projetos: "#projetos-container",
@@ -16,10 +21,7 @@ export const portfolioManager = (function () {
   // Modifique o método de acesso ao Firestore para usar a sintaxe modular
   const _fetchFirestoreData = async (collectionName) => {
     try {
-      const { collection, getDocs } = await import(
-        "https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"
-      );
-      const snapshot = await getDocs(collection(db, collectionName));
+      const snapshot = await getDocs(collection(db, collectionName)); // Uso correto das funções
       return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
@@ -106,14 +108,17 @@ export const portfolioManager = (function () {
       const grid = document.querySelector(
         PORTFOLIO_CONFIG.selectors.isotopeGrid
       );
-      if (grid && window.Isotope) {
-        new Isotope(grid, {
-          itemSelector: ".col-lg-4",
-          layoutMode: "fitRows",
+      if (grid && window.Isotope && window.imagesLoaded) {
+        // Verifica existência
+        window.imagesLoaded(grid, () => {
+          // Usa imagesLoaded
+          new window.Isotope(grid, {
+            itemSelector: ".col-lg-4",
+            layoutMode: "fitRows",
+          });
         });
       }
     },
-
     handleError: function (context, error) {
       console.error(`[${context}]`, error);
       document.getElementById(`${context}-error`).innerHTML = `
