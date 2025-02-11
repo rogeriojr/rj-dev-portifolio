@@ -1,3 +1,4 @@
+import { db } from "./firebase-config.js";
 /**
  * =============================================
  *          GERENCIADOR DE PORTFÓLIO (com Firebase)
@@ -40,7 +41,6 @@ window.portfolioManager = (function () {
   // Métodos privados (agora usando o Firebase)
   const _fetchFirestoreData = async (collectionName) => {
     try {
-      const db = firebase.firestore(); // Obtém a instância do Firestore
       const querySnapshot = await db.collection(collectionName).get();
       return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
