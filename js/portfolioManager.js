@@ -1,4 +1,3 @@
-import { db } from "/components/firebase-config.js";
 /**
  * =============================================
  *          GERENCIADOR DE PORTFÓLIO (com Firebase)

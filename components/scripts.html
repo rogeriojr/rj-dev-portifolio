@@ -3,9 +3,10 @@
 <script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"></script>
 
-<script type="module" src="firebase-config.js"></script> <!-- Importando o arquivo de configuração -->
+<!-- Configuração do Firebase -->
+<script type="module" src="firebase-config.js"></script>
 
-<!-- Seus scripts -->
+<!-- Seus scripts normais -->
 <script src="js/popper.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/stellar.js"></script>
@@ -19,12 +20,12 @@
 <script src="js/gmaps.min.js"></script>
 <script src="js/theme.js"></script>
 
-<script src="js/portfolioManager.js"></script>
-<!-- Certifique-se que o portfolioManager.js utiliza a instância do Firestore importada -->
-<script type="module" src="firebase-config.js"></script>
-<script>
-  //Inicializa portfolioManager após o carregamento do firebase
-  window.addEventListener('load', () => {
-    window.portfolioManager.init();
+<!-- Carregando o gerenciador de portfólio corretamente -->
+<script type="module">
+  import { db } from './firebase-config.js';
+  import { portfolioManager } from './js/portfolioManager.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    portfolioManager.init();
   });
 </script>
