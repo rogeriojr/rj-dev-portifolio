@@ -74,13 +74,6 @@
 		</div>
 	</div>
 
-	<!-- ========== [Banner Principal] ========== -->
-	<div id="home-banner">
-		<div class="loader-container">
-			<div class="loader"></div>
-		</div>
-	</div>
-
 	<!-- ========== [Seção Sobre] ========== -->
 	<section class="about_area section_gap">
 		<div id="about">
@@ -158,7 +151,6 @@
 			// Sequência de carregamento principal
 			Promise.all([
 				loadComponent('#header', './components/header.html'),
-				loadComponent('#home-banner', './components/home-banner.html'),
 				loadComponent('#footer', './components/footer.html'),
 				loadComponent('#about', './about.html')
 			])
