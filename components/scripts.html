@@ -1,10 +1,12 @@
 <!-- Carregando jQuery antes dos scripts que dependem dele -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Firebase compat -->
 <script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"></script>
 
 <!-- Configuração do Firebase -->
-<script type="module" src="firebase-config.js"></script>
+<script type="module" src="/components/firebase-config.js"></script>
 
 <!-- Seus scripts normais -->
 <script src="js/popper.js"></script>
@@ -22,10 +24,9 @@
 
 <!-- Carregando o gerenciador de portfólio corretamente -->
 <script type="module">
-  import { db } from './firebase-config.js';
   import { portfolioManager } from './js/portfolioManager.js';
 
-  document.addEventListener('DOMContentLoaded', () => {
+  $(document).ready(() => {
     portfolioManager.init();
   });
 </script>

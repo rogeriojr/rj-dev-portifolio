@@ -13,10 +13,10 @@ const PORTFOLIO_CONFIG = {
 };
 
 export const portfolioManager = (function () {
+  // Modifique o método de acesso ao Firestore para usar a sintaxe modular
   const _fetchFirestoreData = async (collectionName) => {
     try {
-      // Atualização para Firestore v9 modular
-      const { getDocs, collection } = await import(
+      const { collection, getDocs } = await import(
         "https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"
       );
       const snapshot = await getDocs(collection(db, collectionName));
