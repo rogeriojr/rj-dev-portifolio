@@ -125,42 +125,80 @@ window.portfolioManager = (function () {
         container.innerHTML = projects
           .map(
             (project) => `
-                  <div class="${PORTFOLIO_CONFIG.classes.projectItem} ${
+              <div class="${PORTFOLIO_CONFIG.classes.projectItem} ${
               project.categoria || PORTFOLIO_CONFIG.styles.defaultCategory
             }">
-                      <div class="portfolio_box">
-                          <div class="single_portfolio">
-                              <img class="img-fluid w-100" 
-                                  src="${project.imagem}" 
-                                  alt="${project.titulo}"
-                                  loading="lazy"
-                                  onerror="this.style.display='none'">
-                              <div class="overlay"></div>
-                              <a href="${project.imagem}" class="img-gal">
-                                  <div class="icon"><span class="lnr lnr-cross"></span></div>
-                              </a>
-                          </div>
-                          <div class="short_info">
-                              <h4>${project.titulo}</h4>
-                              <p>${project.descricao}</p>
-                              ${(project.links || [])
-                                .map(
-                                  (link) => `
-                                  <p>
-                                      <a href="${link.url}" 
-                                          target="_blank" 
-                                          rel="noopener noreferrer"
-                                          class="btn-link">
-                                          ${link.texto}
-                                      </a>
-                                  </p>
-                              `
-                                )
-                                .join("")}
-                          </div>
-                      </div>
+                <div class="portfolio_box">
+                  <div class="single_portfolio">
+                    <img class="img-fluid w-100" 
+                      src="${project.imagem}" 
+                      alt="${project.titulo}"
+                      loading="lazy"
+                      style="height: 250px; object-fit: cover;"
+                      onerror="this.style.display='none'">
+                    <div class="overlay"></div>
+                    <a href="${project.imagem}" class="img-gal">
+                      <div class="icon"><span class="lnr lnr-cross"></span></div>
+                    </a>
                   </div>
-              `
+                  <div class="short_info">
+                    <h4>${project.titulo}</h4>
+                    <p class="text-muted">${project.descricao}</p>
+                    ${(project.links || [])
+                      .map(
+                        (link) => `
+                      <div class="link-container">
+                        <a href="${link.url}" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          class="btn-link">
+                          <i class="fa fa-external-link mr-2"></i>${link.texto}
+                        </a>
+                      </div>
+                    `
+                      )
+                      .join("")}
+                  </div>
+                </div>
+              </div>
+            `
+          )
+          .join("");
+      } catch (error) {
+        throw new Error(`Falha na renderização: ${error.message}`);
+      }
+    },
+
+    /**
+     * Renderiza certificados no DOM
+     */
+    renderCertificates: function (certificates) {
+      const container = document.querySelector(
+        PORTFOLIO_CONFIG.selectors.certificados
+      );
+
+      if (!container) {
+        throw new Error("Container de certificados não encontrado");
+      }
+
+      try {
+        container.innerHTML = certificates
+          .map(
+            (cert) => `
+              <div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
+                <div class="card h-100 shadow-sm border-0">
+                  <img src="${cert.imagem}" 
+                    class="card-img-top" 
+                    alt="${cert.titulo}"
+                    loading="lazy"
+                    style="height: ${PORTFOLIO_CONFIG.styles.cardImageHeight}; object-fit: cover; border-radius: 10px 10px 0 0;"
+                    onerror="this.style.display='none'">
+                  <div class="card-body text-center">
+                    <h5 class="card-title font-weight-bold mb-0">${cert.titulo}</h5>
+                  </div>
+                </div>
+              </div>
+            `
           )
           .join("");
       } catch (error) {
