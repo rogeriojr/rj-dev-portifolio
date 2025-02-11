@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="icon" href="img/favicon.png" type="image/png">
+	<title>Portfólio</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="vendors/linericon/style.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
+
+	<!-- Estilos Customizados -->
+	<style>
+		.portfolio_box {
+			background: #fff;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
+			overflow: hidden;
+			margin-bottom: 30px;
+		}
+
+		.portfolio_box:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+		}
+
+		.single_portfolio {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.single_portfolio img {
+			width: 100%;
+			height: 250px;
+			object-fit: cover;
+			transition: transform 0.3s ease;
+		}
+
+		.single_portfolio:hover img {
+			transform: scale(1.05);
+		}
+
+		.overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.single_portfolio:hover .overlay {
+			opacity: 1;
+		}
+
+		.img-gal {
+			position: absolute;
+			bottom: 20px;
+			left: 50%;
+			transform: translateX(-50%);
+			color: #fff;
+			opacity: 0;
+			transition: all 0.3s ease;
+		}
+
+		.single_portfolio:hover .img-gal {
+			opacity: 1;
+			bottom: 30px;
+		}
+
+		.short_info {
+			padding: 25px;
+		}
+
+		.short_info h4 {
+			color: #2c2c2c;
+			font-size: 1.4rem;
+			margin-bottom: 15px;
+			font-weight: 600;
+		}
+
+		.short_info p {
+			color: #666;
+			font-size: 0.95rem;
+			line-height: 1.6;
+			margin-bottom: 15px;
+		}
+
+		.btn-link {
+			color: #2c2c2c;
+			text-decoration: none;
+			font-weight: 500;
+			position: relative;
+			padding: 5px 0;
+			transition: color 0.3s ease;
+		}
+
+		.btn-link:hover {
+			color: #007bff;
+		}
+
+		.btn-link::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 0;
+			height: 2px;
+			background: #007bff;
+			transition: width 0.3s ease;
+		}
+
+		.btn-link:hover::after {
+			width: 100%;
+		}
+
+		/* Filtros */
+		.portfolio-filter li {
+			cursor: pointer;
+			padding: 8px 20px;
+			border-radius: 25px;
+			margin: 0 5px;
+			transition: all 0.3s ease;
+			background: #f8f9fa;
+			color: #666;
+		}
+
+		.portfolio-filter li.active,
+		.portfolio-filter li:hover {
+			background: #007bff;
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- ========== [Área do Cabeçalho] ========== -->
+	<div id="header">
+		<div class="loader-container">
+			<div class="loader"></div>
+		</div>
+	</div>
+
+	<!-- Seção de Portfólio -->
+	<!-- Seção de Projetos -->
+	<section class="portfolio_area" id="portfolio">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="main_title text-left">
+						<h2>Qualidade de Trabalho<br>Projetos recentes</h2>
+					</div>
+				</div>
+			</div>
+			<div class="filters portfolio-filter">
+				<ul class="d-flex justify-content-center">
+					<li class="active" data-filter="*">todos</li>
+					<li data-filter=".popular">popular</li>
+					<li data-filter=".latest"> últimos</li>
+				</ul>
+			</div>
+			<div class="filters-content">
+				<div class="row portfolio-grid justify-content-center" id="projetos-container"></div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Seção de Certificações -->
+	<section class="certificates_area section_gap">
+		<div class="container">
+			<h2 class="mb-5">Minhas Certificações</h2>
+			<div class="row" id="certificados-container"></div>
+		</div>
+	</section>
+
+	<!-- ========== [Rodapé] ========== -->
+	<div id="footer">
+		<div class="loader-container">
+			<div class="loader"></div>
+		</div>
+	</div>
+
+
+	<!-- Scripts de terceiros -->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/popper.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="vendors/isotope/isotope-min.js"></script>
+	<!-- Carrega o script do gerenciador de portfólio -->
+	<script src="js/portfolioManager.js"></script>
+	<!-- Adicione um script de inicialização no final -->
+	<script>
+		if (window.portfolioManager) {
+			window.portfolioManager.init();
+		}
+	</script>
+	<!-- ========== [Scripts de Carregamento] ========== -->
+	<script>
+		$(document).ready(function () {
+			// Função para carregar componentes com feedback visual
+			const loadComponent = (selector, path) => {
+				return new Promise((resolve) => {
+					$(selector).load(path, () => {
+						$(selector).find('.loader-container').remove();
+						resolve();
+					});
+				});
+			};
+
+			// Sequência de carregamento principal
+			Promise.all([
+				loadComponent('#header', './components/header.html'),
+				loadComponent('#footer', './components/footer.html'),
+			])
+				.then(() => {
+					// Carrega scripts comuns
+					$('#scripts').load('./components/scripts.html', () => {
+
+						// Inicializa gerenciador de portfólio
+						$.getScript("js/portfolioManager.js")
+							.done(() => {
+								window.portfolioManager.init();
+								$('#projetos-container, #certificados-container').find('.loader-container').remove();
+							})
+							.fail(() => {
+								console.error("Falha ao carregar portfolioManager");
+								$('#projetos-container, #certificados-container').html(
+									'<div class="col-12 text-center py-5">' +
+									'<div class="alert alert-danger">Erro ao carregar conteúdo</div>' +
+									'</div>'
+								);
+							});
+					});
+				})
+				.catch((error) => {
+					console.error("Erro crítico:", error);
+					$('.loader-container').replaceWith(
+						'<div class="col-12 text-center py-5">' +
+						'<div class="alert alert-danger">Falha ao carregar a página</div>' +
+						'</div>'
+					);
+				});
+		});
+	</script>
+
+</body>
+
+</html>
