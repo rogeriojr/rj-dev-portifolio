@@ -146,59 +146,33 @@
 
 	<!-- ========== [Scripts de Carregamento] ========== -->
 	<script>
-		$(document).ready(function () {
-			// Função para carregar componentes com feedback visual
-			const loadComponent = (selector, path) => {
-				return new Promise((resolve) => {
-					$(selector).load(path, () => {
-						$(selector).find('.loader-container').remove();
-						resolve();
-					});
+		$(function () {
+			function loadComponent(selector, path) {
+				$(selector).load(path, function (response, status) {
+					if (status === "error") {
+						console.error("Erro ao carregar:", path);
+					}
 				});
-			};
+			}
 
-			// Sequência de carregamento principal
+			loadComponent("#header", "./components/header.html");
+			loadComponent("#home-banner", "./components/home-banner.html");
+			loadComponent("#footer", "./components/footer.html");
+			loadComponent("#about", "./about.html");
+			loadComponent("#portfolio", "./portfolio.html");
+		});
+		// Adicione um callback quando todo o conteúdo for carregado
+		$(document).ready(function () {
 			Promise.all([
-				loadComponent('#header', './components/header.html'),
-				loadComponent('#home-banner', './components/home-banner.html'),
-				loadComponent('#footer', './components/footer.html'),
-				loadComponent('#about', './components/about-home.html')
-			])
-				.then(() => {
-					// Carrega scripts comuns
-					$('#scripts').load('./components/scripts.html').done(() => {
-						// Carrega o script APÓS scripts.html
-						$.getScript("js/portfolioManager.js")
-							.done(() => {
-								if (window.portfolioManager && typeof window.portfolioManager.init === 'function') {
-									window.portfolioManager.init();
-									// Remove loaders após inicialização
-									$('#projetos-container, #certificados-container').find('.loader-container').remove();
-								} else {
-									console.error("portfolioManager não inicializado corretamente");
-									// Tratamento de erro
-								}
-							})
-							.fail((jqxhr, settings, exception) => {
-								console.error("Falha ao carregar portfolioManager:", exception);
-								// Exibe mensagem de erro
-								$('#projetos-container, #certificados-container').html(
-									'<div class="col-12 text-center py-5">' +
-									'<div class="alert alert-danger">Erro ao carregar projetos</div>' +
-									'</div>'
-								);
-								$('.error-message').text('Falha ao carregar conteúdo. Tente recarregar a página.').show();
-							});
-					});;
-				})
-				.catch((error) => {
-					console.error("Erro crítico:", error);
-					$('.loader-container').replaceWith(
-						'<div class="col-12 text-center py-5">' +
-						'<div class="alert alert-danger">Falha ao carregar a página</div>' +
-						'</div>'
-					);
-				});
+				$("#header").load("./components/header.html"),
+				$("#home-banner").load("./components/home-banner.html"),
+				$("#footer").load("./components/footer.html"),
+				$("#portfolio-content").load("./portfolio.html")
+			]).then(() => {
+				// Carrega scripts APÓS os componentes
+				$.getScript("js/portfolioManager.js")
+					.fail(() => console.error("Falha ao carregar portfolioManager.js"));
+			});
 		});
 	</script>
 
