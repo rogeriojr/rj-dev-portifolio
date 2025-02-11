@@ -1,62 +1,48 @@
-<!-- components/cadastro.html -->
 <section class="cadastro-section">
   <h2>Cadastrar Novo Projeto</h2>
   <form id="formProjeto">
     <div class="form-group">
-      <label for="titulo">Título:</label>
-      <input type="text" id="titulo" required>
+      <label>Título: <input type="text" id="titulo" required></label>
     </div>
     <div class="form-group">
-      <label for="categoria">Categoria:</label>
-      <select id="categoria" required>
-        <option value="desenvolvimento">Desenvolvimento</option>
-        <option value="design">Design</option>
-        <option value="social-media">Social Media</option>
-      </select>
+      <label>Categoria:
+        <select id="categoria" required>
+          <option value="desenvolvimento">Desenvolvimento</option>
+          <option value="design">Design</option>
+        </select>
+      </label>
     </div>
     <div class="form-group">
-      <label for="descricao">Descrição:</label>
-      <textarea id="descricao" required></textarea>
+      <label>Descrição: <textarea id="descricao" required></textarea></label>
     </div>
     <div class="form-group">
-      <label for="links">Links (separados por vírgula):</label>
-      <textarea id="links" required></textarea>
-    </div>
-    <div class="form-group">
-      <label for="imagem">URL da Imagem:</label>
-      <input type="text" id="imagem" required>
+      <label>Imagem URL: <input type="text" id="imagem" required></label>
     </div>
     <button type="submit">Salvar</button>
     <div id="cadastro-result"></div>
   </form>
 </section>
 
-<script>
-  const formProjeto = document.getElementById('formProjeto');
-  const cadastroResult = document.getElementById('cadastro-result');
+<script type="module">
+  import { db } from '../js/firebase-config.js';
 
-  // Modifique o event listener para:
-  formProjeto.addEventListener('submit', async (e) => {
+  document.getElementById('formProjeto').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const titulo = document.getElementById('titulo').value;
-    const categoria = document.getElementById('categoria').value;
-    const descricao = document.getElementById('descricao').value;
-    const imagem = document.getElementById('imagem').value;
+    const projeto = {
+      titulo: document.getElementById('titulo').value,
+      categoria: document.getElementById('categoria').value,
+      descricao: document.getElementById('descricao').value,
+      imagem: document.getElementById('imagem').value
+    };
 
     try {
-      // Use a instância db importada do firebase-config
-      const docRef = await db.collection('projetos').add({
-        titulo,
-        categoria,
-        descricao,
-        imagem,
-        links: links // Adicione os links diretamente como subcoleção
-      });
-
-      cadastroResult.innerHTML = '<div class="alert alert-success">Projeto cadastrado com sucesso!</div>';
+      await db.collection('projetos').add(projeto);
+      document.getElementById('cadastro-result').innerHTML =
+        '<div class="alert alert-success">Projeto salvo!</div>';
     } catch (error) {
-      cadastroResult.innerHTML = `<div class="alert alert-danger">Erro: ${error.message}</div>`;
+      document.getElementById('cadastro-result').innerHTML =
+        `<div class="alert alert-danger">Erro: ${error.message}</div>`;
     }
   });
 </script>

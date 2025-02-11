@@ -6,8 +6,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="img/favicon.png" type="image/png">
-
-	<!-- Título -->
 	<title>Rogerio Portfólio</title>
 
 	<!-- CSS Principal -->
@@ -19,20 +17,13 @@
 	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
 	<link rel="stylesheet" href="css/style.css">
 
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="isotope.pkgd.min.js"></script>
-
-	<!-- CSS para Loaders e Ajustes de Layout -->
 	<style>
-		/* Prevenir overflow horizontal */
 		html,
 		body {
 			max-width: 100vw;
 			overflow-x: hidden;
 		}
 
-		/* Loaders */
 		.loader-container {
 			display: flex;
 			justify-content: center;
@@ -58,7 +49,6 @@
 			}
 		}
 
-		/* Ajustes Responsivos */
 		.container {
 			padding-left: 15px;
 			padding-right: 15px;
@@ -67,21 +57,21 @@
 </head>
 
 <body>
-	<!-- ========== [Área do Cabeçalho] ========== -->
+	<!-- Cabeçalho -->
 	<div id="header">
 		<div class="loader-container">
 			<div class="loader"></div>
 		</div>
 	</div>
 
-	<!-- ========== [Banner Principal] ========== -->
+	<!-- Banner -->
 	<div id="home-banner">
 		<div class="loader-container">
 			<div class="loader"></div>
 		</div>
 	</div>
 
-	<!-- ========== [Seção Sobre] ========== -->
+	<!-- Sobre -->
 	<section class="about_area section_gap">
 		<div id="about">
 			<div class="loader-container">
@@ -90,7 +80,7 @@
 		</div>
 	</section>
 
-	<!-- ========== [Seção Portfólio] ========== -->
+	<!-- Portfólio -->
 	<section class="portfolio_area section_gap">
 		<div class="container">
 			<div class="row">
@@ -117,7 +107,8 @@
 		</div>
 	</section>
 	<div id="geral-error"></div>
-	<!-- ========== [Seção Certificações] ========== -->
+
+	<!-- Certificações -->
 	<section class="certificates_area section_gap">
 		<div class="container">
 			<div class="row">
@@ -135,17 +126,24 @@
 		</div>
 	</section>
 
-	<!-- ========== [Rodapé] ========== -->
+	<!-- Rodapé -->
 	<div id="footer">
 		<div class="loader-container">
 			<div class="loader"></div>
 		</div>
 	</div>
 
-	<!-- ========== [Scripts de Carregamento] ========== -->
+	<!-- Scripts -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"></script>
+
+	<!-- Scripts locais como módulos -->
+	<script type="module" src="js/firebase-config.js"></script>
+	<script type="module" src="js/portfolioManager.js"></script>
+
 	<script>
 		$(document).ready(function () {
-			// Função para carregar componentes com feedback visual
 			const loadComponent = (selector, path) => {
 				return new Promise((resolve) => {
 					$(selector).load(path, () => {
@@ -155,50 +153,25 @@
 				});
 			};
 
-			// Sequência de carregamento principal
 			Promise.all([
 				loadComponent('#header', './components/header.html'),
 				loadComponent('#home-banner', './components/home-banner.html'),
 				loadComponent('#footer', './components/footer.html'),
 				loadComponent('#about', './about.html')
-			])
-				.then(() => {
-					// Carrega scripts comuns
-					$('#scripts').load('./components/scripts.html', () => {
-
-						// Inicializa gerenciador de portfólio
-						$.getScript("js/portfolioManager.js")
-							.done(() => {
-								window.portfolioManager.init();
-								$('#projetos-container, #certificados-container').find('.loader-container').remove();
-							})
-							.fail(() => {
-								console.error("Falha ao carregar portfolioManager");
-								$('#projetos-container, #certificados-container').html(
-									'<div class="col-12 text-center py-5">' +
-									'<div class="alert alert-danger">Erro ao carregar conteúdo</div>' +
-									'</div>'
-								);
-							});
-					});
-				})
-				.catch((error) => {
-					console.error("Erro crítico:", error);
-					$('.loader-container').replaceWith(
-						'<div class="col-12 text-center py-5">' +
-						'<div class="alert alert-danger">Falha ao carregar a página</div>' +
-						'</div>'
-					);
-				});
+			]).then(() => {
+				$('#scripts').load('./components/scripts.html');
+			}).catch((error) => {
+				console.error("Erro:", error);
+				$('.loader-container').replaceWith(
+					'<div class="col-12 text-center py-5">' +
+					'<div class="alert alert-danger">Falha ao carregar a página</div>' +
+					'</div>'
+				);
+			});
 		});
 	</script>
 
-	<!-- Área para scripts comuns -->
-	<div id="scripts">
-		<!-- Adicione type="module" aos scripts que usam import/export -->
-		<script type="module" src="js/portfolioManager.js"></script>
-		<script type="module" src="components/firebase-config.js"></script>
-	</div>
+	<div id="scripts"></div>
 </body>
 
 </html>
