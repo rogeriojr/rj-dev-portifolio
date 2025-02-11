@@ -21,8 +21,8 @@ export const portfolioManager = (function () {
   // Modifique o método de acesso ao Firestore para usar a sintaxe modular
   const _fetchFirestoreData = async (collectionName) => {
     try {
-      const snapshot = await getDocs(collection(db, collectionName)); // Uso correto das funções
-      return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const querySnapshot = await getDocs(collection(db, collectionName));
+      return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       throw error;
