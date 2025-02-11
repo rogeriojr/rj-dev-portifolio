@@ -1,19 +1,19 @@
 /**
  * =============================================
- *          GERENCIADOR DE PORTFÓLIO
+ *          GERENCIADOR DE PORTFÓLIO (com Firebase)
  * =============================================
  *
  * Responsável pelo carregamento dinâmico e
- * renderização de projetos e certificados
+ * renderização de projetos e certificados do Firestore
  *
  * Funcionalidades principais:
- * 1. Carregamento assíncrono de dados
+ * 1. Carregamento assíncrono de dados do Firestore
  * 2. Renderização de cards responsivos
  * 3. Sistema de filtragem Isotope
  * 4. Tratamento de erros robusto
  */
 
-// Configurações globais
+// Configurações globais (agora com configuração do Firebase)
 const PORTFOLIO_CONFIG = {
   endpoints: {
     projetos: "json/projetos/desenvolvimento.json",
@@ -37,31 +37,19 @@ const PORTFOLIO_CONFIG = {
 
 // Interface principal do portfólio
 window.portfolioManager = (function () {
-  // Métodos privados
-  const _fetchData = async (endpoint) => {
+  // Métodos privados (agora usando o Firebase)
+  const _fetchFirestoreData = async (collectionName) => {
     try {
-      const response = await fetch(endpoint);
-
-      if (!response.ok) {
-        throw new Error(
-          `Erro HTTP: ${response.status} - ${response.statusText}`
-        );
-      }
-
-      return await response.json();
+      const db = firebase.firestore(); // Obtém a instância do Firestore
+      const querySnapshot = await db.collection(collectionName).get();
+      return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
-      console.error(`Falha no fetch: ${endpoint}`, error);
+      console.error(
+        `Erro ao buscar dados do Firestore: ${collectionName}`,
+        error
+      );
       throw error;
     }
-  };
-
-  const _validateDataStructure = (data, expectedKey) => {
-    if (!data[expectedKey] || !Array.isArray(data[expectedKey])) {
-      throw new Error(
-        `Estrutura inválida: Chave '${expectedKey}' não encontrada ou não é array`
-      );
-    }
-    return data[expectedKey];
   };
 
   // Interface pública
@@ -69,43 +57,37 @@ window.portfolioManager = (function () {
     /**
      * Inicializa o portfólio
      */
-    init: function () {
-      this.loadProjects()
-        .then(() => this.initFilters())
-        .catch((error) => this.handleError("projetos", error));
-
-      this.loadCertificates().catch((error) =>
-        this.handleError("certificados", error)
-      );
-    },
-
-    /**
-     * Carrega e renderiza projetos
-     */
-    loadProjects: async function () {
+    init: async function () {
       try {
-        const rawData = await _fetchData(PORTFOLIO_CONFIG.endpoints.projetos);
-        const projects = _validateDataStructure(rawData, "projetos");
-        this.renderProjects(projects);
+        await this.loadProjects();
+        await this.loadCertificates();
+        this.initFilters();
       } catch (error) {
-        throw new Error(`Falha no carregamento de projetos: ${error.message}`);
+        this.handleError("geral", error);
       }
     },
 
     /**
-     * Carrega e renderiza certificados
+     * Carrega e renderiza projetos do Firestore
+     */
+    loadProjects: async function () {
+      try {
+        const projects = await _fetchFirestoreData("projetos");
+        this.renderProjects(projects);
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    /**
+     * Carrega e renderiza certificados do Firestore
      */
     loadCertificates: async function () {
       try {
-        const rawData = await _fetchData(
-          PORTFOLIO_CONFIG.endpoints.certificados
-        );
-        const certificates = _validateDataStructure(rawData, "certificados");
+        const certificates = await _fetchFirestoreData("certificados");
         this.renderCertificates(certificates);
       } catch (error) {
-        throw new Error(
-          `Falha no carregamento de certificados: ${error.message}`
-        );
+        throw error;
       }
     },
 
@@ -205,6 +187,7 @@ window.portfolioManager = (function () {
         throw new Error(`Falha na renderização: ${error.message}`);
       }
     },
+    /**
 
     /**
      * Renderiza certificados no DOM
@@ -277,29 +260,23 @@ window.portfolioManager = (function () {
     },
 
     /**
-     * Manipulador global de erros
+     * Manipulador global de erros (refatorado para melhor clareza)
      */
     handleError: function (context, error) {
       console.error(`[${context.toUpperCase()}]`, error);
+      const container = document.querySelector(`#${context}-error`); // Usa um container de erro específico
 
-      const container = document.querySelector(
-        PORTFOLIO_CONFIG.selectors[context]
-      );
-      if (!container) return;
+      if (!container) {
+        console.warn("Container de erro não encontrado.");
+        return;
+      }
 
       container.innerHTML = `
-              <div class="col-12 text-center py-5">
-                  <div class="alert alert-danger">
-                      <i class="fa fa-exclamation-triangle"></i>
-                      Erro ao carregar ${context}
-                      ${
-                        error.message
-                          ? `<br><small>${error.message}</small>`
-                          : ""
-                      }
-                  </div>
-              </div>
-          `;
+        <div class="alert alert-danger">
+          <i class="fa fa-exclamation-triangle"></i>
+          Erro ao carregar ${context}: ${error.message}
+        </div>
+      `;
     },
   };
 })();

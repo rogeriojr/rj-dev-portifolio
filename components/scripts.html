@@ -1,5 +1,9 @@
 <!-- Carregando jQuery antes dos scripts que dependem dele -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.24.1/firebase-firestore-compat.js"></script>
+
+<script type="module" src="firebase-config.js"></script> <!-- Importando o arquivo de configuração -->
 
 <!-- Seus scripts -->
 <script src="js/popper.js"></script>
@@ -15,5 +19,12 @@
 <script src="js/gmaps.min.js"></script>
 <script src="js/theme.js"></script>
 
-<!-- Carregue seu script apenas depois de jQuery -->
 <script src="js/portfolioManager.js"></script>
+<!-- Certifique-se que o portfolioManager.js utiliza a instância do Firestore importada -->
+
+<script>
+  //Inicializa portfolioManager após o carregamento do firebase
+  window.addEventListener('load', () => {
+    window.portfolioManager.init();
+  });
+</script>

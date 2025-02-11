@@ -3,11 +3,11 @@
   <h2>Cadastrar Novo Projeto</h2>
   <form id="formProjeto">
     <div class="form-group">
-      <label>Título:</label>
+      <label for="titulo">Título:</label>
       <input type="text" id="titulo" required>
     </div>
     <div class="form-group">
-      <label>Categoria:</label>
+      <label for="categoria">Categoria:</label>
       <select id="categoria" required>
         <option value="desenvolvimento">Desenvolvimento</option>
         <option value="design">Design</option>
@@ -15,17 +15,51 @@
       </select>
     </div>
     <div class="form-group">
-      <label>Descrição:</label>
+      <label for="descricao">Descrição:</label>
       <textarea id="descricao" required></textarea>
     </div>
     <div class="form-group">
-      <label>Links (separados por vírgula):</label>
-      <input type="text" id="links">
+      <label for="links">Links (separados por vírgula):</label>
+      <textarea id="links" required></textarea>
     </div>
     <div class="form-group">
-      <label>URL da Imagem:</label>
+      <label for="imagem">URL da Imagem:</label>
       <input type="text" id="imagem" required>
     </div>
     <button type="submit">Salvar</button>
+    <div id="cadastro-result"></div>
   </form>
 </section>
+
+<script>
+  const formProjeto = document.getElementById('formProjeto');
+  const cadastroResult = document.getElementById('cadastro-result');
+
+  formProjeto.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const db = firebase.firestore();
+    const titulo = document.getElementById('titulo').value;
+    const categoria = document.getElementById('categoria').value;
+    const descricao = document.getElementById('descricao').value;
+    const imagem = document.getElementById('imagem').value;
+    const linksText = document.getElementById('links').value;
+    const links = linksText.split(',').map(link => link.trim()).filter(link => link !== "").map(link => ({ texto: link, url: link })); //simplificando aqui
+
+
+    try {
+      const docRef = await db.collection('projetos').add({
+        titulo,
+        categoria,
+        descricao,
+        imagem,
+      });
+      links.forEach(async (link) => {
+        await db.collection('projetos').doc(docRef.id).collection('links').add(link);
+      });
+      cadastroResult.innerHTML = '<div class="alert alert-success">Projeto cadastrado com sucesso!</div>';
+    } catch (error) {
+      cadastroResult.innerHTML = `<div class="alert alert-danger">Erro ao cadastrar projeto: ${error.message}</div>`;
+      console.error("Erro ao cadastrar projeto:", error);
+    }
+  });
+</script>
