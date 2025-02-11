@@ -213,24 +213,28 @@ window.portfolioManager = (function () {
         PORTFOLIO_CONFIG.selectors.isotopeGrid
       );
 
-      if (!gridElement) {
-        console.warn("Elemento grid não encontrado para filtros");
+      if (!gridElement || !window.Isotope) {
+        console.warn("Isotope não carregado ou elemento grid não encontrado");
         return;
       }
 
-      const isotopeGrid = $(gridElement).isotope({
-        itemSelector: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
-        percentPosition: true,
-        masonry: {
-          columnWidth: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
-        },
-      });
+      // Garante que o DOM está pronto
+      $(document).ready(() => {
+        const isotopeGrid = new Isotope(gridElement, {
+          itemSelector: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
+          percentPosition: true,
+          masonry: {
+            columnWidth: "." + PORTFOLIO_CONFIG.styles.defaultCategory,
+          },
+        });
 
-      $(PORTFOLIO_CONFIG.selectors.filterButtons).on("click", function () {
-        $(PORTFOLIO_CONFIG.selectors.filterButtons).removeClass("active");
-        $(this).addClass("active");
-        const filterValue = $(this).attr("data-filter") || "*";
-        isotopeGrid.isotope({ filter: filterValue });
+        $(PORTFOLIO_CONFIG.selectors.filterButtons).on("click", function () {
+          $(this).parent().find(".active").removeClass("active");
+          $(this).addClass("active");
+          isotopeGrid.arrange({
+            filter: $(this).attr("data-filter") || "*",
+          });
+        });
       });
     },
 
