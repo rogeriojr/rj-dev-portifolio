@@ -139,77 +139,41 @@
 			background: #007bff;
 			color: #fff;
 		}
-
-		#portfolio {
-			padding: 80px 0;
-			background: #f8f9fa;
-		}
-
-		.portfolio-item-card {
-			border-radius: 15px;
-			overflow: hidden;
-			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		}
-
-		.portfolio-item-card:hover {
-			box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-		}
-
-		.certificate-badge {
-			position: absolute;
-			top: 15px;
-			right: 15px;
-			background: #6f42c1;
-			color: white;
-			padding: 5px 15px;
-			border-radius: 20px;
-			font-size: 0.8rem;
-		}
 	</style>
 </head>
 
 <body>
 	<!-- Seção de Portfólio -->
+	<!-- Seção de Projetos -->
 	<section class="portfolio_area" id="portfolio">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="main_title text-center">
-						<h2 class="mb-4">Meus Projetos</h2>
-						<p class="text-muted">Explore meus trabalhos recentes e projetos destacados</p>
+					<div class="main_title text-left">
+						<h2>Qualidade de Trabalho<br>Projetos recentes</h2>
 					</div>
 				</div>
 			</div>
-
-			<!-- Filtros atualizados -->
-			<div class="filters portfolio-filter mb-5">
-				<ul class="d-flex justify-content-center flex-wrap">
-					<li class="active" data-filter="*">Todos</li>
-					<li data-filter=".web">Web Design</li>
-					<li data-filter=".app">Aplicativos</li>
-					<li data-filter=".mobile">Mobile</li>
+			<div class="filters portfolio-filter">
+				<ul class="d-flex justify-content-center">
+					<li class="active" data-filter="*">todos</li>
+					<li data-filter=".popular">popular</li>
+					<li data-filter=".latest"> últimos</li>
 				</ul>
 			</div>
-
-			<!-- Container de projetos -->
-			<div class="row portfolio-grid" id="projetos-container"></div>
+			<div class="filters-content">
+				<div class="row portfolio-grid justify-content-center" id="projetos-container"></div>
+			</div>
 		</div>
 	</section>
 
-	<!-- Seção de certificações atualizada -->
-	<section class="certificates_area py-5 bg-white">
+	<!-- Seção de Certificações -->
+	<section class="certificates_area section_gap">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="main_title text-center">
-						<h2 class="mb-4">Certificações Reconhecidas</h2>
-						<p class="text-muted">Credenciais profissionais e certificados de qualificação</p>
-					</div>
-				</div>
-			</div>
+			<h2 class="mb-5">Minhas Certificações</h2>
 			<div class="row" id="certificados-container"></div>
 		</div>
-	</section>>
+	</section>
 
 	<!-- Scripts de terceiros -->
 	<script src="js/jquery-3.2.1.min.js"></script>
