@@ -12,7 +12,7 @@ const PORTFOLIO_CONFIG = {
     filterButtons: ".portfolio-filter li",
   },
   classes: {
-    projectItem: "col-lg-4 col-md-6 all",
+    projectItem: "col-lg-4 col-md-6 mb-4 all",
     certificateItem: "col-lg-3 col-md-4 col-sm-6 mb-4",
   },
 };
@@ -55,54 +55,59 @@ export const portfolioManager = (function () {
     },
 
     loadProjects: async function () {
-      try {
-        const projects = await _fetchFirestoreData("projetos");
-        this.renderProjects(projects);
-      } catch (error) {
-        throw error;
-      }
+      const projects = await _fetchFirestoreData("projetos");
+      this.renderProjects(projects);
     },
 
     loadCertificates: async function () {
-      try {
-        const certificates = await _fetchFirestoreData("certificados");
-        this.renderCertificates(certificates);
-      } catch (error) {
-        throw error;
-      }
+      const certificates = await _fetchFirestoreData("certificados");
+      this.renderCertificates(certificates);
     },
 
     renderProjects: function (projects) {
       const container = document.querySelector(
         PORTFOLIO_CONFIG.selectors.projetos
       );
-      if (!container) {
-        console.error("❌ ERRO: Container de projetos não encontrado!");
-        return;
-      }
-      console.log("🎨 Renderizando projetos...", projects);
       container.innerHTML = projects
         .map(
           (project) => `
-              <div class="${PORTFOLIO_CONFIG.classes.projectItem}">
-                  <div class="portfolio_box" 
-                       style="background: white; border-radius: 12px; padding: 15px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center;">
-                      <div class="single_portfolio" 
-                           style="background: #cec0f5; border-radius: 8px; padding: 10px;">
-                          <img src="${project.imagem}" alt="${project.titulo}" 
-                               style="height: 250px; width: 100%; object-fit: contain; border-radius: 8px;">
-                      </div>
-                      <div class="short_info" style="padding: 10px;">
-                          <h4 style="color: #cec0f5; font-size: 20px; margin-bottom: 5px;">${project.titulo}</h4>
-                          <p style="color: #333; font-size: 14px;">${project.descricao}</p>
-                          <a href="${project.link}" target="_blank" 
-                             style="display: inline-block; margin-top: 8px; padding: 8px 15px; background: #6f42c1; color: white; border-radius: 6px; text-decoration: none; transition: 0.3s;">
-                              🔗 Ver Projeto
-                          </a>
-                      </div>
-                  </div>
+        <div class="${PORTFOLIO_CONFIG.classes.projectItem} ${
+            project.categoria || "latest"
+          }">
+          <div class="card h-100 border-0 shadow-lg hover-scale">
+            <div class="card-header p-3" style="background: #6f42c1; border-radius: 15px 15px 0 0;">
+              <img src="${project.imagem}" alt="${project.titulo}" 
+                   class="img-fluid" 
+                   style="height: 200px; object-fit: contain; border-radius: 10px;">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title mb-3" style="color: #2d3748; font-weight: 600;">
+                ${project.titulo}
+              </h5>
+              <p class="card-text text-secondary mb-4" style="font-size: 0.9rem;">
+                ${project.descricao}
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <a href="${project.link}" target="_blank" 
+                   class="btn btn-primary btn-sm px-4 py-2" 
+                   style="border-radius: 8px; transition: all 0.3s;">
+                  <i class="fa fa-external-link mr-2"></i>Ver Projeto
+                </a>
+                ${
+                  project.repo
+                    ? `
+                <a href="${project.repo}" target="_blank" 
+                   class="btn btn-outline-secondary btn-sm px-3 py-2"
+                   style="border-radius: 8px; transition: all 0.3s;">
+                  <i class="fa fa-github mr-2"></i>Código
+                </a>`
+                    : ""
+                }
               </div>
-          `
+            </div>
+          </div>
+        </div>
+      `
         )
         .join("");
     },
@@ -119,23 +124,26 @@ export const portfolioManager = (function () {
       container.innerHTML = certificates
         .map(
           (cert) => `
-              <div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
-                  <div class="card h-100" 
-                       style="background: white; border-radius: 12px; padding: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center;">
-                      <div style="background: #cec0f5; border-radius: 8px; padding: 10px;">
-                          <img src="${cert.imagem}" class="card-img-top" 
-                               alt="${cert.titulo}" style="height: 200px; width: 100%; object-fit: contain; border-radius: 8px;">
-                      </div>
-                      <div class="card-body">
-                          <h5 class="card-title" style="color: #6f42c1;">${cert.titulo}</h5>
-                          <a href="${cert.link}" target="_blank" 
-                             style="display: inline-block; margin-top: 5px; padding: 8px 15px; background: #6f42c1; color: white; border-radius: 6px; text-decoration: none; transition: 0.3s;">
-                              📜 Ver Certificado
-                          </a>
-                      </div>
-                  </div>
-              </div>
-          `
+        <div class="${PORTFOLIO_CONFIG.classes.certificateItem}">
+          <div class="card h-100 border-0 shadow-sm hover-scale">
+            <div class="card-img-top overflow-hidden" style="background: #f8f9fa; padding: 20px;">
+              <img src="${cert.imagem}" alt="${cert.titulo}" 
+                   class="img-fluid" 
+                   style="height: 180px; object-fit: contain;">
+            </div>
+            <div class="card-body text-center">
+              <h6 class="card-title mb-3" style="color: #4a5568; font-size: 0.95rem;">
+                ${cert.titulo}
+              </h6>
+              <a href="${cert.link}" target="_blank" 
+                 class="btn btn-link text-primary px-3 py-2" 
+                 style="text-decoration: none; transition: all 0.3s;">
+                <i class="fa fa-certificate mr-2"></i>Ver Credencial
+              </a>
+            </div>
+          </div>
+        </div>
+      `
         )
         .join("");
     },
@@ -144,11 +152,27 @@ export const portfolioManager = (function () {
       const grid = document.querySelector(
         PORTFOLIO_CONFIG.selectors.isotopeGrid
       );
-      if (grid && window.Isotope && window.imagesLoaded) {
+      const filters = document.querySelectorAll(
+        PORTFOLIO_CONFIG.selectors.filterButtons
+      );
+
+      if (grid && window.Isotope) {
         window.imagesLoaded(grid, () => {
           new window.Isotope(grid, {
-            itemSelector: ".col-lg-4",
+            itemSelector: `.${
+              PORTFOLIO_CONFIG.classes.projectItem.split(" ")[0]
+            }`,
             layoutMode: "fitRows",
+            percentPosition: true,
+          });
+        });
+
+        filters.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            filters.forEach((f) => f.classList.remove("active"));
+            btn.classList.add("active");
+            const filterValue = btn.getAttribute("data-filter");
+            window.Isotope(grid).arrange({ filter: filterValue });
           });
         });
       }
@@ -157,12 +181,10 @@ export const portfolioManager = (function () {
     handleError: function (context, error) {
       console.error(`[${context}]`, error);
       document.getElementById(`${context}-error`).innerHTML = `
-                <div class="alert alert-danger">Erro ao carregar ${context}</div>
-            `;
+        <div class="alert alert-danger mx-3">Erro ao carregar ${context}</div>
+      `;
     },
   };
 })();
 
-document.addEventListener("DOMContentLoaded", () => {
-  portfolioManager.init();
-});
+document.addEventListener("DOMContentLoaded", () => portfolioManager.init());
