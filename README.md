@@ -2,6 +2,12 @@
 
 Bem-vindo ao meu repositório dedicado ao meu Portfólio pessoal de trabalhos. Este espaço foi criado para integrar versionamento e workflows de deploy, permitindo-me compartilhar e documentar meus projetos de desenvolvimento.
 
+## Em desenvolvimento para otimizar o tempo rodar o server
+```bash
+live-server
+
+```
+
 ## Sobre o Projeto
 
 Este portfólio é uma plataforma simples desenvolvida em HTML, CSS e JavaScript até o momento. Ele serve como um showcase dos meus trabalhos e habilidades, destacando projetos relevantes e experiências de desenvolvimento.
