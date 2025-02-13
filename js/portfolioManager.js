@@ -92,13 +92,35 @@ export const portfolioManager = (function () {
                           <img src="${project.imagem}" alt="${project.titulo}" 
                                style="height: 250px; width: 100%; object-fit: contain; border-radius: 8px;">
                       </div>
+
                       <div class="short_info" style="padding: 10px;">
-                          <h4 style="color: #cec0f5; font-size: 20px; margin-bottom: 5px;">${project.titulo}</h4>
-                          <p style="color: #333; font-size: 14px;">${project.descricao}</p>
-                          <a href="${project.link}" target="_blank" 
-                             style="display: inline-block; margin-top: 8px; padding: 8px 15px; background: #6f42c1; color: white; border-radius: 6px; text-decoration: none; transition: 0.3s;">
-                              🔗 Ver Projeto
-                          </a>
+                          <h4 style="color: #cec0f5; font-size: 20px; margin-bottom: 5px;">${
+                            project.titulo
+                          }</h4>
+                          <p style="color: #333; font-size: 14px;">${
+                            project.descricao
+                          }</p>
+                          <div style="margin-top: auto;">
+                          ${
+                            project.links && project.links.length > 0
+                              ? project.links
+                                  .map(
+                                    (link) => `
+                                    <a href="${link.url}" target="_blank" 
+                                       style="display: inline-block; margin: 5px; padding: 8px 15px; 
+                                              background: #6f42c1; color: white; border-radius: 6px; 
+                                              text-decoration: none; transition: 0.3s;">
+                                        <i class="fa fa-external-link"></i>🔗 ${link.texto}
+                                    </a>
+                                `
+                                  )
+                                  .join("")
+                              : `  <a href="${project.link}" target="_blank" 
+                              style="display: inline-block; margin-top: 8px; padding: 8px 15px; background: #6f42c1; color: white; border-radius: 6px; text-decoration: none; transition: 0.3s;">
+                               🔗 Ver Projeto
+                           </a>`
+                          }
+                          </div>
                       </div>
                   </div>
               </div>
