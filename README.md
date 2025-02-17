@@ -1,7 +1,5 @@
 # Portfólio de Desenvolvimento por RJ-Dev
 
-
-## Example
 ![image](https://github.com/user-attachments/assets/31611fe6-22bc-4f89-a5f5-c90b34fdf65d)
 
 
